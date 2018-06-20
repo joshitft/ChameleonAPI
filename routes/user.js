@@ -7,7 +7,7 @@
 */
 
 const router = require('express').Router(),
-    User = require('../controller/user')
+    User = require('../controller/profile')
 
     
 router.post('/', User.addUser)

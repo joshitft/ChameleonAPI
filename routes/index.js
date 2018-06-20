@@ -12,5 +12,4 @@ router.post('/login', authCont.loginCallback);
 router.use('/user',require('./user'))
 
 
-
 module.exports = router;
