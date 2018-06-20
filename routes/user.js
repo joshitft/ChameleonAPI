@@ -1,32 +1,21 @@
+
 /*
 1.POST => /user
 2.GET  => /user/:id
 3.PUT/PATCH => /user/:id
 4.DEL => /user/:id
 */
-const router = require('express').Router()
 
+const router = require('express').Router(),
+    User = require('../controller/user')
 
-router.POST('/user', (req, res, next)=>{
+    
+router.post('/', User.addUser)
 
-    //to add a user
-})
+router.get('/:id', User.getUser)
 
-router.GET('/user/:id', (req, res, next)=>{
+router.put('/:id', User.updateUser)
 
-    //to send details of user
-})
-
-router.PUT('/user/:id', (req, res, next)=>{
-
-    //to update details of a user
-})
-
-router.DELETE('/user', (req, res, next)=>{
-
-    //to delete a user
-})
-
-
+router.delete('/', User.deleteUser)
 
 module.exports = router;
