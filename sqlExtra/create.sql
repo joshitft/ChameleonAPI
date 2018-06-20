@@ -1,6 +1,6 @@
 
  CREATE TABLE `chameleon`.`profiles` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `alias` VARCHAR(250) NOT NULL,
   `firstName` VARCHAR(250) NOT NULL,
   `lastName` VARCHAR(250) NOT NULL,
@@ -12,7 +12,7 @@
   `zipCode` VARCHAR(250) NOT NULL,
   `industry` VARCHAR(250) NOT NULL,
   `currentPosition` VARCHAR(250) NOT NULL,
-  `removedAt` DATETIME NOT NULL,
+  `removedAt` DATETIME DEFAULT NULL,
   `createdAt` DATETIME NOT NULL,
   `updatedAt` DATETIME NOT NULL,
   PRIMARY KEY (`id`)

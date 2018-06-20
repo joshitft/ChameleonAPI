@@ -23,7 +23,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/login', checkJwt, authCont.loginCallback);
-router.use('/user',require('./user'));
 
+
+
+router.use('/user',require('./user'));
 
 module.exports = router;
