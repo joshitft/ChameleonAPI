@@ -2,15 +2,15 @@
   "development": {
     "username": "root",
     "password": "root",
-    "database": "articles",
+    "database": "chameleon",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
-    "password": "root",
-    "database": "shop_db",
-    "host": "localhost",
+    "username": "",
+    "password": "",
+    "database": "",
+    "host": "",
     "dialect": "mysql"
   },
   "production": {
