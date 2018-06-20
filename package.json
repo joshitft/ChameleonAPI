@@ -9,6 +9,9 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
+    "express-jwt": "^5.3.1",
+    "express-jwt-authz": "^1.0.0",
+    "jwks-rsa": "^1.2.1",
     "morgan": "~1.9.0",
     "mysql2": "^1.5.3",
     "sequelize": "^4.37.10"
