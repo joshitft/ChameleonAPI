@@ -14,7 +14,7 @@ router.post('/', User.addUser)
 //User Details
 router.get('/:id', User.getUser)
 //Update User
-router.put('/:id', User.updateUser)
+router.put('/', User.updateUser)
 //Delete User
 router.delete('/:id', User.deleteUser)
 
