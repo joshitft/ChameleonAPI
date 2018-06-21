@@ -9,6 +9,6 @@ const user = sequilize.define('profile',{
     },
     alias: Sequelize.STRING
 
-})
+});
 
 module.exports = user;
