@@ -7,15 +7,15 @@
 */
 
 const router = require('express').Router(),
-    User = require('../controller/user')
+    User = require('../controller/profile')
 
-    
+//Signup    
 router.post('/', User.addUser)
-
+//User Details
 router.get('/:id', User.getUser)
-
+//Update User
 router.put('/:id', User.updateUser)
-
-router.delete('/', User.deleteUser)
+//Delete User
+router.delete('/:id', User.deleteUser)
 
 module.exports = router;
