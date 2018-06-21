@@ -5,6 +5,7 @@ const sequilize = require('../db'),
 const profile = sequilize.define('profiles',{
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     alias: Sequelize.STRING,

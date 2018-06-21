@@ -3,23 +3,22 @@ const userModel = require('../../model/profileModel'),
     util = require('../../util')
 
 
-exports.addUser = (req,res)=>{
+exports.addProfileData = (req,res)=>{
     //body object format needed and then checks required
-    let user = req.body;
-    user = fetchUserDBObj(user);
+    let userDBObj = fetchUserDBObj(req.body);
 
-    if(!user.alias)
-        return res.status(400).send({data: false}); //just for begining
+    if(!userDBObj.alias)
+        return res.status(400).send({data: false}); //just for begining: make sure all data is present in inserting object
 
-    userModel.create(dbObj)
-    .then(result => {
-        res.status(200).send({data: result})
+    userModel.create(userDBObj)
+    .then(user => {
+        // @TODO  response in id
+        res.status(200).send({data: user}) // problem HERE
     })
     .catch(err => { 
         console.log(err);
         res.status(500).send({data: false})
     })
-
 }
 
 exports.getUser = (req,res)=>{
@@ -35,35 +34,32 @@ exports.getUser = (req,res)=>{
     })
     .catch(err => { 
         console.log(err);
-        res.status(500).send({data: false})
-    })
-    
+        res.status(500).send({data: false});
+    })  
 }
 
 exports.updateUser = (req,res)=>{
-    let user = req.body;
-    userDBObj = fetchUserDBObj(user);
-    
-    if(!user.id)
-        return res.status(400).send({data: false}); //just for begining
-    
-    userModel.update(userDBObj,{ where: { id: user.id }})
+    let userID = req.params.id; 
+    if(!parseInt(userID,10))
+        return res.status(400).send({data:false});
+
+    userDBObj = fetchUserDBObj(req.body);
+    userModel.update(userDBObj,{ where: { id: userID }})
     .spread((affectedCount, affectedRows) => {
         // affectedRows will only be defined in dialects which support returning: true
         res.status(200).send({data:affectedCount});
     }).catch(err => { 
         console.log(err);
         res.status(500).send({data: false})
-    })
-    
+    })    
 }
 
 exports.deleteUser = (req,res)=>{
-    let userId = req.params.id;
-    if(!parseInt(userId,10))
+    let userID = req.params.id;
+    if(!parseInt(userID,10))
         return res.status(400).send({data:false});
 
-    userModel.destroy({where:{'id':userId}}).then(rowAffected =>{
+    userModel.destroy({where:{'id':userID}}).then(rowAffected =>{
         if(rowAffected)
             res.status(200).send({data: rowAffected});
         else

@@ -3,6 +3,7 @@ let router = express.Router();
 let authCont = require('../controller/auth')
 const passport = require('passport');
 
+router.use('/user',require('./user'));
 const env = {
     AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
     AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
