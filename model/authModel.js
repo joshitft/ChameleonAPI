@@ -6,7 +6,10 @@ const Login = sequelize.define('membership',{
         primaryKey: true
     },
     username: Sequelize.STRING,
-    password_hash: Sequelize.INTEGER
+    created_at: Sequelize.DATE,
+    updated_at: Sequelize.DATE,
+    removed_at: Sequelize.DATE,
+    profile_id: Sequelize.INTEGER
 });
 
 module.exports = Login;
