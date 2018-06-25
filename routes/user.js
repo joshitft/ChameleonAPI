@@ -1,9 +1,9 @@
 
 const router = require('express').Router(),
-    User = require('../controller/profile'),
+    User = require('../controller/profileCont'),
     authorize = require('../authorize');
 
-    Followers = require('../controller/profile/followers');
+    Followers = require('../controller/profileCont/followers');
 
 //User Profile Addition  
 router.post('/', User.addProfileData)

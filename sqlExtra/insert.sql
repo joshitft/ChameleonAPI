@@ -57,6 +57,23 @@ INSERT INTO `chameleon`.`comments`
 VALUES
 ("2","3","1","no brasil was better","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
 
+#for reactionTypes
+INSERT INTO `chameleon`.`reactionTypes`
+(`id` ,`name`,`createdAt`,`updatedAt`)
+VALUES
+("1","like","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
+
+#for postReactions
+INSERT INTO `chameleon`.`postReactions`
+(`id` ,`postId`,`profileId`,`reactionTypeId`,`createdAt`,`updatedAt`)
+VALUES
+("1","1","2","1","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
+
+INSERT INTO `chameleon`.`postReactions`
+(`id` ,`postId`,`profileId`,`reactionTypeId`,`createdAt`,`updatedAt`)
+VALUES
+("2","1","4","1","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
+
 
 #for followings dummy data
 

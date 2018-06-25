@@ -1,3 +1,4 @@
+CREATE DATABASE `chameleon`;
 
  CREATE TABLE `chameleon`.`profiles` (
   `id` INT  AUTO_INCREMENT,
@@ -17,6 +18,7 @@
   `updatedAt` DATETIME ,
   PRIMARY KEY (`id`)
 );
+
  CREATE TABLE `chameleon`.`posts` (
   `id` INT  AUTO_INCREMENT,
   `profileId` INT,
@@ -27,7 +29,27 @@
   `updatedAt` DATETIME ,
   PRIMARY KEY (`id`)
 );
- CREATE TABLE `chameleon`.`comments` (
+
+CREATE TABLE `chameleon`.`reactionTypes` (
+  `id` INT  AUTO_INCREMENT,
+  `name` VARCHAR(250) ,
+  `createdAt` DATETIME ,
+  `updatedAt` DATETIME ,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `chameleon`.`postReactions` (
+  `id` INT  AUTO_INCREMENT,
+  `postId` INT ,
+  `profileId` INT,
+  `reactionTypeId` INT ,
+  `removedAt` DATETIME DEFAULT NULL,
+  `createdAt` DATETIME ,
+  `updatedAt` DATETIME ,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `chameleon`.`comments` (
   `id` INT  AUTO_INCREMENT,
   `postId` INT ,
   `profileId` INT,
@@ -37,8 +59,6 @@
   `updatedAt` DATETIME ,
   PRIMARY KEY (`id`)
 );
-
-
 
 
 

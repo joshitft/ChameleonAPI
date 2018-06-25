@@ -1,4 +1,4 @@
-const userCont = require('../../controller/profile')
+const userCont = require('../../controller/profileCont')
 
 exports.successSignup = (req,res)=>{
     console.log("CALLBACK HIT ::::::::::::::::::::::::::::::")
