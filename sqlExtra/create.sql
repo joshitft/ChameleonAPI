@@ -60,10 +60,6 @@ CREATE TABLE `chameleon`.`comments` (
   PRIMARY KEY (`id`)
 );
 
-
-
-
-
  CREATE TABLE `chameleon`.`followings` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `follower` INT NOT NULL,

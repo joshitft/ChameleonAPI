@@ -74,7 +74,6 @@ INSERT INTO `chameleon`.`postReactions`
 VALUES
 ("2","1","4","1","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
 
-
 #for followings dummy data
 
 INSERT INTO `chameleon`.`followings`

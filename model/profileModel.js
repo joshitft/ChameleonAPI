@@ -19,7 +19,9 @@ const profile = sequilize.define('profiles',{
     zipCode: Sequelize.STRING,
     industry: Sequelize.STRING,
     currentPosition: Sequelize.STRING,
-    removedAt: Sequelize.DATE
+    removedAt: Sequelize.DATE,
+    updatedAt: Sequelize.DATE,
+    createdAt: Sequelize.DATE
 })
 
 module.exports = profile;

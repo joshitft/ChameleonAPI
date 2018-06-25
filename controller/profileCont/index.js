@@ -12,7 +12,6 @@ exports.addProfileData = (req,res)=>{
 
     userModel.create(userDBObj)
     .then(user => {
-        // @TODO  response in id
         res.status(200).send({data: user}) // problem HERE
     })
     .catch(err => { 
