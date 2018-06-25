@@ -44,4 +44,14 @@
 
 
 
+ CREATE TABLE `chameleon`.`followings` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `follower` INT NOT NULL,
+  `following` INT NOT NULL,
+  `removedAt` DATETIME DEFAULT NULL,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
 

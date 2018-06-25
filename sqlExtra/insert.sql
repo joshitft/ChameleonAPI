@@ -58,3 +58,14 @@ VALUES
 ("2","3","1","no brasil was better","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
 
 
+#for followings dummy data
+
+INSERT INTO `chameleon`.`followings`
+(`id` ,`following` ,`follower`)
+VALUES
+(1,1,2,NOW(),NOW());
+
+INSERT INTO `chameleon`.`followings`
+(`id` ,`following` ,`follower`,`createdAt`,`updatedAt`)
+VALUES
+(2,2,1,NOW(),NOW());
