@@ -12,7 +12,8 @@ const checkJwt = jwt({
 
     audience: 'http://localhost:3000',
     issuer: `https://joshi-suresh.auth0.com/`,
-    algorithms: ['RS256']
+    algorithms: ['RS256'],
+    scope: 'openid profile'
 });
 
 module.exports = checkJwt;

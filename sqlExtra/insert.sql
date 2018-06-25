@@ -25,4 +25,36 @@ INSERT INTO `chameleon`.`profiles`
 VALUES
 ("5","user5","f_name5","l_name5","male","user5@yahoo.com","999999995","america","california","21214","Marketing","senior head","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
 
+#for posts
+INSERT INTO `chameleon`.`posts`
+(`id` ,`profileId`,`content`,`imageLink`,`createdAt`,`updatedAt`)
+VALUES
+("1","1","superb prformance by brasil","./postImages/brasil.jpg","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
+
+INSERT INTO `chameleon`.`posts`
+(`id` ,`profileId`,`content`,`imageLink`,`createdAt`,`updatedAt`)
+VALUES
+("2","2","superb prformance by brasil","./postImages/brasil.jpg","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
+
+INSERT INTO `chameleon`.`posts`
+(`id` ,`profileId`,`content`,`imageLink`,`createdAt`,`updatedAt`)
+VALUES
+("3","3","superb prformance by Argentina","./postImages/argentina.jpg","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
+
+INSERT INTO `chameleon`.`posts`
+(`id` ,`profileId`,`content`,`imageLink`,`createdAt`,`updatedAt`)
+VALUES
+("4","4","superb prformance by brasil","./postImages/brasil.jpg","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
+
+#for comments
+INSERT INTO `chameleon`.`comments`
+(`id` ,`postId`,`profileId`,`content`,`createdAt`,`updatedAt`)
+VALUES
+("1","1","2","yes indeed","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
+
+INSERT INTO `chameleon`.`comments`
+(`id` ,`postId`,`profileId`,`content`,`createdAt`,`updatedAt`)
+VALUES
+("2","3","1","no brasil was better","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
+
 

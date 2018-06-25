@@ -1,6 +1,7 @@
 
 
 exports.getOneFeed = (req,res)=>{
+    console.log(req.user);
     res.json({
         name: 'Hello from a private endpoint! You need to be authenticated to see this.',
         created: "01-02-2018 20:21:00",
