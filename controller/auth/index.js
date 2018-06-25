@@ -1,9 +1,7 @@
-
-exports.loginCallback = (req,res)=>{
-    res.send("This is the login page")
-};
+const userCont = require('../../controller/profile')
 
 exports.successSignup = (req,res)=>{
+    console.log("CALLBACK HIT ::::::::::::::::::::::::::::::")
     const userData = require('../../config/userRawData');
     const provider = userData[0].identities[0].provider;
     console.log(provider)
@@ -17,7 +15,7 @@ exports.successSignup = (req,res)=>{
             break
         }
         case "auth0": {
-            console.log("auth0")
+            userCont.addProfileData(req,res);
             break
         }
     }

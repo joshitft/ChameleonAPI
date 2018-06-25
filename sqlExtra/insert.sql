@@ -26,3 +26,14 @@ VALUES
 ("5","user5","f_name5","l_name5","male","user5@yahoo.com","999999995","america","california","21214","Marketing","senior head","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
 
 
+#for followings dummy data
+
+INSERT INTO `chameleon`.`followings`
+(`id` ,`following` ,`follower`)
+VALUES
+(1,1,2,NOW(),NOW());
+
+INSERT INTO `chameleon`.`followings`
+(`id` ,`following` ,`follower`,`createdAt`,`updatedAt`)
+VALUES
+(2,2,1,NOW(),NOW());
