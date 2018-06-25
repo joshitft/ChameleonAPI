@@ -78,7 +78,7 @@ VALUES
 #for followings dummy data
 
 INSERT INTO `chameleon`.`followings`
-(`id` ,`following` ,`follower`)
+(`id` ,`following` ,`follower`,`createdAt`,`updatedAt`)
 VALUES
 (1,1,2,NOW(),NOW());
 
