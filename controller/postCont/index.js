@@ -22,22 +22,29 @@ exports.addPost = (req,res)=>{
 
 exports.getposts = (req,res)=>{
     let postID = req.params.id;
-    let dataOBJ = {}; 
+    let resultData = {success: false,data:{}}; 
     if(!parseInt(postID,10))
-        return res.status(400).send({data:false})
+        return res.status(400).send(resultData)
 
     postModel.findById(postID)
     .then(post =>{
-        data.post = post;
+        if(!post)
+            throw new Error('No post found');
+        
+        resultData.data.post = post;
         return commentController.getComments(post.id);
     })
     .then(comments => {
-        data.comments = comments;
-        return res.status(200).send(data);
+        if(!comments)
+            throw new Error('No comment found');
+        
+        resultData.success = true;
+        resultData.data.comments = comments;
+        return res.status(200).send(resultData);
     })
     .catch(err => { 
-        console.log(err);
-        res.status(500).send({data: false});
+        console.log(err.message);
+        res.status(500).send(resultData);
     });  
 };
 

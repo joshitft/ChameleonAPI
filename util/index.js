@@ -1,6 +1,5 @@
 
 //This function will return you the date and time in the following format: YYYY:MM:DD:HH:MM:SS.
-
 exports.getDateTime = () => {
 
     var date = new Date();
@@ -24,4 +23,8 @@ exports.getDateTime = () => {
 
     return year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
 
+}
+
+exports.Error = (erroString) =>{
+    return new Error(erroString)
 }
