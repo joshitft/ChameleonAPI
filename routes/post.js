@@ -13,7 +13,9 @@ DEL /post/:id
 //Post Creation  
 router.post('/', postCont.addPost)
 //Post Details
-router.get('/:id', postCont.getposts)
+router.get('/:id', postCont.getpost)
+//all post 
+router.get('/', postCont.getAllPost)
 //Post updatation
 router.put('/:id', postCont.updatePost)
 //Post Deletion

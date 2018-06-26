@@ -1,5 +1,6 @@
 const postModel = require('../../model/postModel'),
-    commentController = require('./comment')
+    commentController = require('./comment'),
+    util = require('../../util')
  
 
 exports.addPost = (req,res)=>{
@@ -14,14 +15,39 @@ exports.addPost = (req,res)=>{
         res.status(200).send({data: user}) // problem HERE
     })
     .catch(err => { 
-        console.log(err);
-        res.status(500).send({data: false})
+        util.errorHandler(err,req,res)
     })
     
 };
 
-exports.getposts = (req,res)=>{
+exports.getpost = (req,res)=>{
     let postID = req.params.id;
+    let resultData = {success: false,data:{}}; 
+    if(!parseInt(postID,10))
+        return res.status(400).send(resultData)
+
+    postModel.findById(postID)
+    .then(post =>{
+        if(!post)
+            throw new Error('No post found');
+        
+        resultData.data.post = post;
+        return commentController.getComments(post.id);
+    })
+    .then(comments => {
+        if(!comments)
+            throw new Error('No comment found');
+        
+        resultData.success = true;
+        resultData.data.comments = comments;
+        return res.status(200).send(resultData);
+    })
+    .catch(err => { 
+        util.errorHandler(err,req,res)
+    });  
+};
+
+exports.getAllPost = (req,res)=>{
     let resultData = {success: false,data:{}}; 
     if(!parseInt(postID,10))
         return res.status(400).send(resultData)
@@ -60,8 +86,7 @@ exports.updatePost = (req,res)=>{
         // affectedRows will only be defined in dialects which support returning: true
         res.status(200).send({data:affectedCount});
     }).catch(err => { 
-        console.log(err);
-        res.status(500).send({data: false})
+        util.errorHandler(err,req,res)
     })  
 };
 
@@ -77,8 +102,7 @@ exports.deletePost = (req,res)=>{
             res.status(200).send({data: false});
     })
     .catch(err => { 
-        console.log(err);
-        res.status(500).send({data: false})
+        util.errorHandler(err,req,res)
     })
 };
 
