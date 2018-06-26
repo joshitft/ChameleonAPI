@@ -1,4 +1,5 @@
-followingModel = require('../../model/followingsModel')
+const followingModel = require('../../model/followingsModel'),
+    util = require('../../util')
 
 exports.getFollowers = (req,res)=>{
     const id = req.params.id;
@@ -9,8 +10,7 @@ exports.getFollowers = (req,res)=>{
     })
         .then(data => res.status(200).send({success: true,data}))
         .catch(err=> {
-            console.log(err);
-            res.status(500).send({success: false,data: false})
+            util.errorHandler(err,req,res)
         })
     };
 
@@ -23,7 +23,6 @@ exports.getFollowings = (req,res)=>{
     })
         .then(data => res.status(200).send({success: true,data}))
         .catch(err=> {
-            console.log(err);
-            res.status(500).send({success: false,data: false})
+            util.errorHandler(err,req,res)
         })
     };
