@@ -6,7 +6,12 @@ exports.getFollowers = (req,res)=>{
         where: {
             following: id
         }
-    }).then(data => res.json(data))
+    })
+        .then(data => res.status(200).send({success: true,data}))
+        .catch(err=> {
+            console.log(err);
+            res.status(500).send({success: false,data: false})
+        })
     };
 
 exports.getFollowings = (req,res)=>{
@@ -15,5 +20,10 @@ exports.getFollowings = (req,res)=>{
         where: {
             follower: id
         }
-    }).then(data => res.json(data))
+    })
+        .then(data => res.status(200).send({success: true,data}))
+        .catch(err=> {
+            console.log(err);
+            res.status(500).send({success: false,data: false})
+        })
     };

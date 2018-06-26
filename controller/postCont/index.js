@@ -4,6 +4,8 @@ const postModel = require('../../model/postModel'),
 
 exports.addPost = (req,res)=>{
     //body object format needed and then checks required
+    console.log(req.file);
+    req.body.imageLink = req.file ? req.file.filename : '';
     let postDBObj = fetchPostDBObj(req.body);
 
     if(!postDBObj.profileId)
