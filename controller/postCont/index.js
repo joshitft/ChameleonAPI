@@ -1,4 +1,5 @@
-const postModel = require('../../model/postModel')
+const postModel = require('../../model/postModel'),
+    commentController = require('./comment')
  
 
 exports.addPost = (req,res)=>{
@@ -20,21 +21,24 @@ exports.addPost = (req,res)=>{
 };
 
 exports.getposts = (req,res)=>{
-    let postID = req.params.id; 
+    let postID = req.params.id;
+    let dataOBJ = {}; 
     if(!parseInt(postID,10))
         return res.status(400).send({data:false})
 
-    postModel.findById(postID).then(post =>{
-        if(post)
-            res.status(200).send({data: post});
-        else
-            res.status(200).send({data: false});
+    postModel.findById(postID)
+    .then(post =>{
+        data.post = post;
+        return commentController.getComments(post.id);
+    })
+    .then(comments => {
+        data.comments = comments;
+        return res.status(200).send(data);
     })
     .catch(err => { 
         console.log(err);
         res.status(500).send({data: false});
-    }) 
-    
+    });  
 };
 
 exports.updatePost = (req,res)=>{

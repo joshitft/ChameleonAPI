@@ -5,6 +5,7 @@ CREATE DATABASE `chameleon`;
   `alias` VARCHAR(250) ,
   `firstName` VARCHAR(250) ,
   `lastName` VARCHAR(250) ,
+  `image` VARCHAR(250),
   `gender` VARCHAR(10) ,
   `email` VARCHAR(250) ,
   `cellularNumber` VARCHAR(250) ,
