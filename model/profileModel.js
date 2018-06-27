@@ -1,27 +1,27 @@
 
-const sequilize = require('../db'),
-    Sequelize = require('sequelize')
-
-const profile = sequilize.define('profiles',{
+module.exports = (sequelize, DataTypes) => { 
+    const profile = sequelize.define('profiles',{
     id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    alias: Sequelize.STRING,
-    firstName: Sequelize.STRING,
-    lastName: Sequelize.STRING,
-    gender: Sequelize.STRING,
-    email: Sequelize.STRING,
-    cellularNumber: Sequelize.STRING,
-    country: Sequelize.STRING,
-    city: Sequelize.STRING,
-    zipCode: Sequelize.STRING,
-    industry: Sequelize.STRING,
-    currentPosition: Sequelize.STRING,
-    removedAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE,
-    createdAt: Sequelize.DATE
-})
+    alias: DataTypes.STRING,
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
+    gender: DataTypes.STRING,
+    email: DataTypes.STRING,
+    image: DataTypes.STRING,
+    cellularNumber: DataTypes.STRING,
+    country: DataTypes.STRING,
+    city: DataTypes.STRING,
+    zipCode: DataTypes.STRING,
+    industry: DataTypes.STRING,
+    currentPosition: DataTypes.STRING,
+    removedAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
+    createdAt: DataTypes.DATE
+});
 
-module.exports = profile;
+return profile;
+}

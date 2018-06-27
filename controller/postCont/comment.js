@@ -1,4 +1,4 @@
-const commentModel = require('../../model/commentModel')
+const commentModel = require('../../db').comment
  
 
 exports.addComment = (commentObj)=>{

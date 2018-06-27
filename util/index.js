@@ -30,7 +30,16 @@ exports.Error = (erroString) =>{
 }
 
 exports.errorHandler = (err,req,res) =>{
-    console.log(err);
-    //console.log(err.message)
-    res.status(500).send(resultData);
+    /*
+        use "err.message" for custom error handling
+    */
+   let statusCode = 500;
+    if(err.message == "content not found")
+        {
+            statusCode = 400;
+            console.log(err.message)
+        }
+    else
+        console.log(err);
+    res.status(statusCode).send({success:false, data: false});
 }

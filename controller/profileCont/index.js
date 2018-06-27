@@ -1,5 +1,5 @@
 
-const userModel = require('../../model/profileModel'),
+const userModel = require('../../db').profile,
     util = require('../../util')
 
 
@@ -13,12 +13,11 @@ exports.addProfileData = (req,res)=>{
     userModel.create(userDBObj)
     .then(user => {
         if(!user)
-            throw new Error('No user found');
+            throw new Error('content not found');
         res.status(200).send({success:true,data: user}) 
     })
     .catch(err => { 
-        console.log(err);
-        res.status(500).send({success:false,data: false})
+        util.errorHandler(err,req,res)
     })
 }
 
@@ -29,12 +28,11 @@ exports.getUser = (req,res)=>{
 
     userModel.findById(userID).then(user =>{
         if(!user)
-            throw new Error('No user found');
+            throw new Error('content not found');
         res.status(200).send({success:true,data: user})
     })
     .catch(err => { 
-        console.log(err);
-        res.status(500).send({success:false,data: false});
+        util.errorHandler(err,req,res)
     })  
 }
 
@@ -51,8 +49,7 @@ exports.updateUser = (req,res)=>{
             res.status(400).send({success:false,data:false})
         res.status(200).send({success:true,data:affectedCount});
     }).catch(err => { 
-        console.log(err);
-        res.status(500).send({success:false,data:false})
+        util.errorHandler(err,req,res)
     })    
 }
 

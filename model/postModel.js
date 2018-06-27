@@ -1,19 +1,20 @@
 
-const sequilize = require('../db'),
-Sequelize = require('sequelize')
+module.exports = (sequelize, DataTypes) => {  
 
-const post = sequilize.define('posts',{
-id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-},
-profileId: Sequelize.INTEGER,
-content: Sequelize.TEXT,
-imageLink: Sequelize.STRING,
-removedAt: Sequelize.DATE,
-updatedAt: Sequelize.DATE,
-createdAt: Sequelize.DATE
-})
+    const post = sequelize.define('posts',{
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
 
-module.exports = post;
+    profileId: DataTypes.INTEGER,
+    content: DataTypes.TEXT,
+    imageLink: DataTypes.STRING,
+    removedAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
+    createdAt: DataTypes.DATE
+    })
+
+    return post;
+}

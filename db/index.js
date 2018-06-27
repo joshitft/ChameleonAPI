@@ -17,4 +17,26 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
     operatorsAliases: false
 });
 
-module.exports = sequelize;
+const db = {};
+
+db.Sequelize = Sequelize;  
+db.sequelize = sequelize;
+
+//Models/tables
+db.auth = require('../model/authModel')(sequelize, Sequelize);
+db.profile = require('../model/profileModel')(sequelize, Sequelize);  
+db.comment = require('../model/commentModel')(sequelize, Sequelize);  
+db.post = require('../model/postModel')(sequelize, Sequelize);
+db.following = require('../model/followingsModel')(sequelize,Sequelize);
+db.postReactions = require('../model/postReactions')(sequelize,Sequelize);
+
+//Relations
+db.post.belongsTo(db.profile);  
+db.profile.hasMany(db.post);
+db.comment.belongsTo(db.post);  
+db.post.hasMany(db.comment);
+db.postReactions.belongsTo(db.post);  
+db.post.hasMany(db.postReactions);
+
+
+module.exports = db;  

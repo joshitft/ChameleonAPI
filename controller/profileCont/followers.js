@@ -1,4 +1,4 @@
-const followingModel = require('../../model/followingsModel'),
+const followingModel = require('../../db').following,
     util = require('../../util')
 
 exports.getFollowers = (req,res)=>{

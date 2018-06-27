@@ -1,15 +1,18 @@
-var sequelize = require('../db');
-const Sequelize = require('sequelize');
-const Login = sequelize.define('membership',{
-    id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true
-    },
-    username: Sequelize.STRING,
-    created_at: Sequelize.DATE,
-    updated_at: Sequelize.DATE,
-    removed_at: Sequelize.DATE,
-    profile_id: Sequelize.INTEGER
-});
 
-module.exports = Login;
+module.exports = (sequelize, DataTypes) => { 
+
+    const Login = sequelize.define('membership',{
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true
+        },
+        username: DataTypes.STRING,
+        created_at: DataTypes.DATE,
+        updated_at: DataTypes.DATE,
+        removed_at: DataTypes.DATE,
+        profile_id: DataTypes.INTEGER
+    });
+
+    return Login;
+}
+
