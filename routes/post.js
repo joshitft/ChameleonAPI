@@ -1,20 +1,8 @@
 
 const router = require('express').Router(),
-postCont = require('../controller/postCont');
+    postCont = require('../controller/postCont'),
+    upload = require('../util/').Multer.upload();
 
-const multer = require('multer');
-const path = require('path');
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb)=> {
-        cb(null, 'public/images/uploads')
-    },
-    filename: (req, file, cb)=> {
-        let fileArr = file.originalname.split('.');
-        cb(null, fileArr[0] + '-' + Date.now() + path.extname(file.originalname))
-    }
-});
-const upload = multer({storage:storage});
 /*
 POST /post/:userId
 GET /post/:id

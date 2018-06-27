@@ -1,3 +1,6 @@
+const multer = require('multer'),
+    path = require('path');
+
 
 //This function will return you the date and time in the following format: YYYY:MM:DD:HH:MM:SS.
 exports.getDateTime = () => {
@@ -42,4 +45,23 @@ exports.errorHandler = (err,req,res) =>{
     else
         console.log(err);
     res.status(statusCode).send({success:false, data: false});
+}
+
+function multerInit(){
+    return multer.diskStorage({
+        destination: (req, file, cb)=> {
+            cb(null, './public/images/uploads')
+        },
+        filename: (req, file, cb)=> {
+            let fileArr = file.originalname.split('.');
+            cb(null, fileArr[0] + '-' + Date.now() + path.extname(file.originalname))
+        }
+    });
+};
+
+exports.Multer = {
+    upload : ()=>{
+        storage = multerInit();
+        return multer({storage : storage});
+    }
 }
