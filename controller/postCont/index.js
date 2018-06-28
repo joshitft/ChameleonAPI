@@ -52,7 +52,13 @@ exports.getpost = (req,res)=>{
 exports.getAllPost = (req,res)=>{
     db.profile.findAll({
         include: [{ model: db.post,
-                    include: [{ model: db.comment}]
+                    include: [{ 
+                                model: db.comment
+                              },
+                              {
+                                  model: db.postReactions
+                              }
+                            ]
                 }]
     }).then(profile => {
         if(!profile)
@@ -75,6 +81,7 @@ exports.getAllPost = (req,res)=>{
                         imageLink: post.imageLink,
                         createdAt: post.createdAt,
                         numberOfComments: post.comments.length,
+                        numberOfReactions: post.postReactions.length
                     })
                 })
             }

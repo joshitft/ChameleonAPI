@@ -31,11 +31,11 @@ db.following = require('../model/followingsModel')(sequelize,Sequelize);
 db.postReactions = require('../model/postReactions')(sequelize,Sequelize);
 
 //Relations
-db.post.belongsTo(db.profile);  
+//db.post.belongsTo(db.profile);  
 db.profile.hasMany(db.post);
-db.comment.belongsTo(db.post);  
+//db.comment.belongsTo(db.post);  
 db.post.hasMany(db.comment);
-db.postReactions.belongsTo(db.post);  
+//db.postReactions.belongsTo(db.post);  
 db.post.hasMany(db.postReactions);
 
 
