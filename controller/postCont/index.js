@@ -50,7 +50,7 @@ exports.getpost = (req,res)=>{
 };
 
 exports.getAllPost = (req,res)=>{
-    db.profile.findAll({
+    /*db.post.findAll({
         include: [{ model: db.post,
                     include: [{ 
                                 model: db.comment
@@ -58,7 +58,7 @@ exports.getAllPost = (req,res)=>{
                               {
                                   model: db.postReactions
                               }
-                            ]
+                            ],
                 }]
     }).then(profile => {
         if(!profile)
@@ -89,7 +89,12 @@ exports.getAllPost = (req,res)=>{
         res.status(200).send({success:true, data:resObj});
     }).catch(err => { 
         util.errorHandler(err,req,res)
-    })
+    })*/
+    db.sequelize.query("SELECT postTable.* ,pro.firstName ,pro.lastName, pro.country, pro.city,pro.picture AS userImage FROM (SELECT y.* ,COUNT(sh.id) shCount FROM ( SELECT x.* ,COUNT(rec.id) recId FROM ( SELECT a.id ,a.content ,a.createdAt ,a.profileId AS uid,a.imageLink AS postImage,COUNT(c.content) AS 'count' FROM posts a LEFT JOIN comments c ON a.id = c.postId GROUP BY a.id ORDER BY a.createdAt DESC LIMIT 10) x LEFT JOIN postReactions rec ON rec.postId = x.id GROUP BY x.id ) y LEFT JOIN shares sh ON sh.postId = y.id GROUP BY y.id) postTable LEFT JOIN profiles pro ON pro.id = postTable.uid", { type: db.sequelize.QueryTypes.SELECT})
+    .then(users => {
+        res.send(users)
+    // We don't need spread here, since only the results will be returned for select queries
+  })
 };
 
 exports.updatePost = (req,res)=>{
