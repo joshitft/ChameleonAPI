@@ -1,4 +1,5 @@
 const multer = require('multer'),
+    AuthenticateResult = require('./../authenticate/Result'),
     path = require('path');
 
 
@@ -32,19 +33,19 @@ exports.Error = (erroString) =>{
     return new Error(erroString)
 }
 
-exports.errorHandler = (err,req,res) =>{
+exports.sendResponse = (statusCode,msg,res) =>{
     /*
-        use "err.message" for custom error handling
+        use "err.message" for sending response
     */
-   let statusCode = 500;
-    if(err.message == "content not found")
-        {
-            statusCode = 400;
-            console.log(err.message)
-        }
-    else
-        console.log(err);
-    res.status(statusCode).send({success:false, data: false});
+    let result = new AuthenticateResult(statusCode, msg, null);
+    res.status(statusCode).send(result);
+}
+
+exports.errorHandler = (statusCode,err,res) =>{
+    //    use "err.message" for custom error handling
+
+    let result = new AuthenticateResult(statusCode, null, error);
+    res.status(statusCode).send(result);
 }
 
 function multerInit(){

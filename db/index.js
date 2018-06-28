@@ -7,7 +7,7 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
     dialect: config.dialect,
 
     pool: {
-        max: 5,
+        max: 10,
         min: 0,
         acquire: 30000,
         idle: 10000
@@ -16,7 +16,6 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
     // http://docs.sequelizejs.com/manual/tutorial/querying.html#operators
     operatorsAliases: false
 });
-
 const db = {};
 
 db.Sequelize = Sequelize;  
