@@ -74,6 +74,18 @@ INSERT INTO `chameleon`.`postReactions`
 VALUES
 ("2","1","4","1","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
 
+#for shares dummy data
+INSERT INTO `chameleon`.`shares`
+(`id` ,`postId`,`profileId`,`createdAt`,`updatedAt`)
+VALUES
+(null,"1","1",NOW(),NOW());
+
+INSERT INTO `chameleon`.`shares`
+(`id` ,`postId`,`profileId`,`createdAt`,`updatedAt`)
+VALUES
+(null,"2","1",NOW(),NOW());
+
+
 #for followings dummy data
 
 INSERT INTO `chameleon`.`followings`
