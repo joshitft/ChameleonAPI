@@ -26,3 +26,21 @@ exports.getFollowings = (req,res)=>{
             util.errorHandler(err,req,res)
         })
     };
+
+exports.addFollower = (req,res)=>{
+    const toFollow = req.body[0].toFollow;
+    const userId = req.body[0].userId;
+
+    followingModel.findOrCreate({
+        where: {
+            follower: userId,
+            following: toFollow
+        }
+    })
+        .then(data => {
+            res.status(200).send({success: true,data})
+        })
+        .catch(err=> {
+            util.errorHandler(err,req,res)
+        })
+    };

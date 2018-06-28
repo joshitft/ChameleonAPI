@@ -61,6 +61,16 @@ CREATE TABLE `chameleon`.`comments` (
   PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `chameleon`.`shares` (
+  `id` INT  AUTO_INCREMENT,
+  `postId` INT ,
+  `profileId` INT,
+  `removedAt` DATETIME DEFAULT NULL,
+  `createdAt` DATETIME ,
+  `updatedAt` DATETIME ,
+  PRIMARY KEY (`id`)
+);
+
  CREATE TABLE `chameleon`.`followings` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `follower` INT NOT NULL,
