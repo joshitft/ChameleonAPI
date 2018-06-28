@@ -2,10 +2,11 @@ CREATE DATABASE `chameleon`;
 
  CREATE TABLE `chameleon`.`profiles` (
   `id` INT  AUTO_INCREMENT,
-  `alias` VARCHAR(250) ,
+  `authId` VARCHAR (250),
+  `name` VARCHAR(250) ,
   `firstName` VARCHAR(250) ,
   `lastName` VARCHAR(250) ,
-  `image` VARCHAR(250),
+  `picture` VARCHAR(250),
   `gender` VARCHAR(10) ,
   `email` VARCHAR(250) ,
   `cellularNumber` VARCHAR(250) ,
@@ -13,7 +14,19 @@ CREATE DATABASE `chameleon`;
   `city` VARCHAR(250) ,
   `zipCode` VARCHAR(250) ,
   `industry` VARCHAR(250) ,
+  `nickname` VARCHAR(250),
+  `provider` VARCHAR(250),
+  `userAuthId` VARCHAR(250),
   `currentPosition` VARCHAR(250) ,
+  `removedAt` DATETIME DEFAULT NULL,
+  `createdAt` DATETIME ,
+  `updatedAt` DATETIME ,
+  PRIMARY KEY (`id`)
+);
+
+ CREATE TABLE `chameleon`.`authLogins` (
+  `id` VARCHAR(250),
+  `profileId` INT,
   `removedAt` DATETIME DEFAULT NULL,
   `createdAt` DATETIME ,
   `updatedAt` DATETIME ,

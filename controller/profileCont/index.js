@@ -1,24 +1,67 @@
 
 const userModel = require('../../db').profile,
-    util = require('../../util')
+    authModel = require('../../db').auth,
+    AuthenticateResult = require('../../authenticate/Result'),
+    util = require('../../util');
 
 
-exports.addProfileData = (req,res)=>{
+exports.addProfileData = (req,res)=> {
     //body object format needed and then checks required
-    let userDBObj = fetchUserDBObj(req.body);
+    console.log("==============",req.user)
+    let response;
+    if (!req.user || !req.user['https://tft']) {
+        response = new AuthenticateResult(422, null, {'message': "User information is not found in token"});
+        res.status(422)
+        res.send(JSON.stringify(response));
+    }
+    else {
+        let success = (result) => {
+                if (result) {
+                    res.status(201)
+                    res.success = true;
+                    response = new AuthenticateResult(201, result, null);
 
-    if(!userDBObj.alias)
-        return res.status(400).send({success:false,data: false}); //just for begining: make sure all data is present in inserting object
+                } else {
+                    res.status(422)
+                    result = new AuthenticateResult(422, null, {'message': "Cant able to add user"});
+                }
+                res.send(JSON.stringify(result));
+            },
+            error = (error) => {
+                res.status(404);
+                response = new AuthenticateResult(404, null, error);
+                res.send(JSON.stringify(response));
+            },
+            userDBObj = fetchUserDBObj(req.user['https://tft']);
 
-    userModel.create(userDBObj)
-    .then(user => {
-        if(!user)
-            throw new Error('content not found');
-        res.status(200).send({success:true,data: user}) 
-    })
-    .catch(err => { 
-        util.errorHandler(err,req,res)
-    })
+        if (!userDBObj.authId)
+            return res.status(400).send({success: false, data: false, message: 'User id is not present'});
+console.log("USER OBJ::::::::::::::",userDBObj);
+        authModel.findOne({
+            where: {
+                id: userDBObj.authId
+            }
+        }).then(user => {
+            console.log("user is :",user)
+                if (user) success.call(this,{mesage: 'USER is already added : '+user.id});
+                else {
+                    userModel.create(userDBObj)
+                        .then(user => {
+                            if (user) {
+                                authModel.create({
+                                    id: userDBObj.authId,
+                                    profileId: user.id
+                                }).then(user => {
+                                    success.call(this, user)
+                                }).catch(err => error.call(this, err))
+                            }
+                        }).catch(err => error.call(this, err));
+                }
+            })
+            .catch(err => {
+                util.errorHandler(err, req, res)
+            })
+    }
 }
 
 exports.getUser = (req,res)=>{
@@ -73,16 +116,23 @@ exports.deleteUser = (req,res)=>{
 
 function fetchUserDBObj(user){
     return dbObj = {
-            alias: user.alias,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            gender: user.gender,
-            email: user.email,
-            cellularNumber: user.cellularNumber,
-            country: user.country,
-            city: user.city,
-            zipCode: user.zipCode,
-            industry: user.industry,
-            currentPosition: user.currentPosition
-        }
+        authId : user._id,
+        email: user.email,
+        alias: user.name,
+        firstName: user.given_name,
+        lastName: user.family_name,
+        gender: user.gender || undefined,
+        picture : user.picture,
+        nickname : user.nickname,
+        provider : user.identities.provider,
+        created_at : user.created_at,
+        updated_at : user.updated_at,
+        user_auth_id : user.identities.user_id,
+        cellularNumber: user.cellularNumber,
+        country: user.country,
+        city: user.city,
+        zipCode: user.zipCode,
+        industry: user.industry,
+        currentPosition: user.currentPosition
+    }
 }
