@@ -23,21 +23,16 @@ exports.addPost = (req,res)=>{
 //update as per getAllposts
 exports.getpost = (req,res)=>{
     let postID = req.params.id;
-<<<<<<< HEAD
     let resultData = {success: false, data:{}}; 
-=======
-    let resultData = {}
->>>>>>> 9a3fd53792093a8707f5461ef67106472897c884
     if(!parseInt(postID,10))
         return util.errorHandler.call(this,422,{message : 'Error in creating post'}, res)
 
     db.post.findById(postID,{attributes: ['id','profileId','content','imageLink']})
     .then(post =>{
-<<<<<<< HEAD
         if(!post)
-            throw new Error('content not found');
+            return util.errorHandler.call(this,422,{message : 'Error in creating post'}, res)
         
-        //resultData.data.post = post;
+        resultData.data.post = post;
         let promise = []
         promise.push(db.profile.findById(post.profileId));
         promise.push(db.postReactions.count({ where: {'postId':post.profileId}}));
@@ -51,13 +46,6 @@ exports.getpost = (req,res)=>{
         resultData.data = user;
 
         res.status(200).send(resultData);
-=======
-        if(!post) return util.errorHandler.call(this,422,{message : 'Error in creating post'}, res)
-
-        resultData.data.post = post;
-        //return commentController.getComments(post.id);
-        //write logic here
->>>>>>> 9a3fd53792093a8707f5461ef67106472897c884
     })
 
     //    return commentCont.getComments(post.id);
@@ -131,12 +119,8 @@ exports.updatePost = (req,res)=>{
         return res.status(400).send({success:true,data:false});
 
     postDBObj = fetchPostDBObj(req.body);
-<<<<<<< HEAD
-    console.log(postDBObj)
     db.postModel.update(postDBObj,{ where: { id: postID }})
-=======
     postModel.update(postDBObj,{ where: { id: postID }})
->>>>>>> 9a3fd53792093a8707f5461ef67106472897c884
     .spread((affectedCount, affectedRows) => {
         // affectedRows will only be defined in dialects which support returning: true
         if(!affectedCount)
