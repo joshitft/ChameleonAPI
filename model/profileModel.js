@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        authId: DataTypes.STRING,
         name: DataTypes.STRING,
         firstName: DataTypes.STRING,
         lastName: DataTypes.STRING,
@@ -29,11 +28,8 @@ module.exports = (sequelize, DataTypes) => {
 
     }, {
         instanceMethods: {
-            loginUserInfo: function () {
-                return {
-                    id: this.id,
-                    name: this.alias,
-                }
+            toJSON: function () {
+                return this;
             }
         }
     })

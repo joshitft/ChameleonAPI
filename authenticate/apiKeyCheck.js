@@ -30,5 +30,5 @@ const checkJwt = jwt({
     ];
 
 module.exports = {
-    checkJwt,
+    checkJwt : checkJwt,
 };
