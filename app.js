@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes'));
-
+app.use("/public", express.static(path.join(__dirname, 'public')));
 
 db.sequelize.sync()
     .then(() => {
