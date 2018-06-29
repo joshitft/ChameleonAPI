@@ -1,11 +1,11 @@
 let express = require('express');
 let util = require('../util');
-let router = express.Router(),
-    checkJwt = require('../authenticate/apiKeyCheck').checkJwt;
+let router = express.Router();
+let apiKeyCheck = require('../authenticate/apiKeyCheck');
 
-router.use('/user',checkJwt,require('./user'));
+router.use('/user',apiKeyCheck.checkJwt,require('./user'));
 router.use('/auth',require('./auth'));
-router.use('/post',checkJwt,require('./post'));
+router.use('/post',require('./post'));
 
 router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });

@@ -2,7 +2,6 @@ CREATE DATABASE `chameleon`;
 
  CREATE TABLE `chameleon`.`profiles` (
   `id` INT  AUTO_INCREMENT,
-  `authId` VARCHAR (250),
   `name` VARCHAR(250) ,
   `firstName` VARCHAR(250) ,
   `lastName` VARCHAR(250) ,
