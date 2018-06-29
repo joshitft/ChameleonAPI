@@ -32,8 +32,10 @@ db.share = require('../model/shareModel')(sequelize,Sequelize);
 
 //Relations
 //db.post.belongsTo(db.profile);  
+db.auth.belongsTo(db.profile);
+
 db.profile.hasMany(db.post);
-//db.comment.belongsTo(db.post);  
+//db.comment.belongsTo(db.post);
 db.post.hasMany(db.comment);
 //db.postReactions.belongsTo(db.post);  
 db.post.hasMany(db.postReactions);

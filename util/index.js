@@ -44,7 +44,7 @@ exports.sendResponse = (statusCode,msg,res) =>{
 exports.errorHandler = (statusCode,err,res) =>{
     //    use "err.message" for custom error handling
 
-    let result = new AuthenticateResult(statusCode, null, error);
+    let result = new AuthenticateResult(statusCode, null, err);
     res.status(statusCode).send(result);
 }
 
