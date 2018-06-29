@@ -23,15 +23,14 @@ exports.addPost = (req,res)=>{
 //update as per getAllposts
 exports.getpost = (req,res)=>{
     let postID = req.params.id;
-    let resultData = {success: false,data:{}}; 
+    let resultData = {}
     if(!parseInt(postID,10))
-        return res.status(400).send(resultData)
+        return util.errorHandler.call(this,422,{message : 'Error in creating post'}, res)
 
     postModel.findById(postID)
     .then(post =>{
-        if(!post)
-            throw new Error('content not found');
-        
+        if(!post) return util.errorHandler.call(this,422,{message : 'Error in creating post'}, res)
+
         resultData.data.post = post;
         //return commentController.getComments(post.id);
         //write logic here
