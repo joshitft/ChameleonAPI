@@ -1,11 +1,6 @@
 const db = require('../../db'),
-<<<<<<< HEAD
-    util = require('../../util'),
-    commentCont = require('./comment')
-=======
     util = require('../../util');
 
->>>>>>> e440fc130f0c2e99835e979c34ab5576d8706c49
 
 exports.addPost = (req,res)=>{
     //body object format needed and then checks required
