@@ -1,6 +1,6 @@
 const db = require('../../db'),
-    util = require('../../util')
- 
+    util = require('../../util');
+
 
 exports.addPost = (req,res)=>{
     //body object format needed and then checks required
@@ -89,7 +89,12 @@ exports.getAllPost = (req,res)=>{
     }).catch(err => { 
         util.errorHandler(err,req,res)
     })*/
-    db.sequelize.query("SELECT postTable.* ,pro.firstName ,pro.lastName, pro.country, pro.city,pro.picture AS userImage FROM (SELECT y.* ,COUNT(sh.id) shCount FROM ( SELECT x.* ,COUNT(rec.id) recId FROM ( SELECT a.id ,a.content ,a.createdAt ,a.profileId AS uid,a.imageLink AS postImage,COUNT(c.content) AS 'count' FROM posts a LEFT JOIN comments c ON a.id = c.postId GROUP BY a.id ORDER BY a.createdAt DESC) x LEFT JOIN postReactions rec ON rec.postId = x.id GROUP BY x.id ) y LEFT JOIN shares sh ON sh.postId = y.id GROUP BY y.id) postTable LEFT JOIN profiles pro ON pro.id = postTable.uid", { type: db.sequelize.QueryTypes.SELECT})
+    const url = require('url'),
+        url_parts = url.parse(req.url, true),
+        offset = (url_parts.query.page - 1) * 10 + ",",
+        limit = "LIMIT "+offset+10;
+
+    db.sequelize.query("SELECT postTable.* ,pro.firstName ,pro.lastName, pro.country, pro.city,pro.picture AS userImage FROM (SELECT y.* ,COUNT(sh.id) shCount FROM ( SELECT x.* ,COUNT(rec.id) recId FROM ( SELECT a.id ,a.content ,a.createdAt ,a.profileId AS uid,a.imageLink AS postImage,COUNT(c.content) AS 'count' FROM posts a LEFT JOIN comments c ON a.id = c.postId GROUP BY a.id ORDER BY a.createdAt DESC "+limit+") x LEFT JOIN postReactions rec ON rec.postId = x.id GROUP BY x.id ) y LEFT JOIN shares sh ON sh.postId = y.id GROUP BY y.id) postTable LEFT JOIN profiles pro ON pro.id = postTable.uid", { type: db.sequelize.QueryTypes.SELECT})
     .then(users => {
         util.sendResponse.call(this,201,users,res)
     // We don't need spread here, since only the results will be returned for select queries
