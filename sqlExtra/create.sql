@@ -24,6 +24,7 @@ CREATE DATABASE `chameleon`;
   PRIMARY KEY (`id`)
 );
 
+<<<<<<< Updated upstream
  CREATE TABLE `chameleon`.`authLogins` (
   `id` VARCHAR(250),
   `profileId` INT,
@@ -33,6 +34,8 @@ CREATE DATABASE `chameleon`;
   PRIMARY KEY (`id`)
 );
 
+=======
+>>>>>>> Stashed changes
  CREATE TABLE `chameleon`.`posts` (
   `id` INT  AUTO_INCREMENT,
   `profileId` INT,
@@ -73,6 +76,7 @@ CREATE TABLE `chameleon`.`comments` (
   `updatedAt` DATETIME ,
   PRIMARY KEY (`id`)
 );
+<<<<<<< Updated upstream
 
 CREATE TABLE `chameleon`.`shares` (
   `id` INT  AUTO_INCREMENT,
@@ -83,6 +87,8 @@ CREATE TABLE `chameleon`.`shares` (
   `updatedAt` DATETIME ,
   PRIMARY KEY (`id`)
 );
+=======
+>>>>>>> Stashed changes
 
  CREATE TABLE `chameleon`.`followings` (
   `id` INT NOT NULL AUTO_INCREMENT,

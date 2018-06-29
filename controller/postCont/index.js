@@ -1,6 +1,6 @@
 const db = require('../../db'),
-    util = require('../../util')
- 
+    util = require('../../util'),
+    commentCont = require('./comment')
 
 exports.addPost = (req,res)=>{
     //body object format needed and then checks required
@@ -23,20 +23,34 @@ exports.addPost = (req,res)=>{
 //update as per getAllposts
 exports.getpost = (req,res)=>{
     let postID = req.params.id;
-    let resultData = {success: false,data:{}}; 
+    let resultData = {success: false, data:{}}; 
     if(!parseInt(postID,10))
         return res.status(400).send(resultData)
 
-    postModel.findById(postID)
+    db.post.findById(postID,{attributes: ['id','profileId','content','imageLink']})
     .then(post =>{
         if(!post)
             throw new Error('content not found');
         
-        resultData.data.post = post;
-        //return commentController.getComments(post.id);
-        //write logic here
+        //resultData.data.post = post;
+        let promise = []
+        promise.push(db.profile.findById(post.profileId));
+        promise.push(db.postReactions.count({ where: {'postId':post.profileId}}));
+        promise.push(db.share.count({ where: {'postId':post.profileId}}))
+        
+        return Promise.all(promise)
+
+        //return db.profile.findById(post.profileId)
     })
-    .then(comments => {
+    .then(user => {
+        resultData.data = user;
+
+        res.status(200).send(resultData);
+    })
+
+    //    return commentCont.getComments(post.id);
+    //})
+   /* .then(comments => {
         if(!comments)
             throw new Error('content not found');
         
@@ -44,6 +58,8 @@ exports.getpost = (req,res)=>{
         resultData.data.comments = comments;
         util.sendResponse.call(this,200,comments,res)
     })
+        res.status(200).send(resultData);
+    })*/
     .catch(err => { 
         util.errorHandler(err,req,res)
     });  
@@ -104,7 +120,7 @@ exports.updatePost = (req,res)=>{
 
     postDBObj = fetchPostDBObj(req.body);
     console.log(postDBObj)
-    postModel.update(postDBObj,{ where: { id: postID }})
+    db.postModel.update(postDBObj,{ where: { id: postID }})
     .spread((affectedCount, affectedRows) => {
         // affectedRows will only be defined in dialects which support returning: true
         if(!affectedCount)
@@ -120,7 +136,7 @@ exports.deletePost = (req,res)=>{
     if(!parseInt(postID,10))
         return res.status(400).send({success:false,data:false});
 
-    postModel.destroy({where:{'id':postID}}).then(rowAffected =>{
+    db.postModel.destroy({where:{'id':postID}}).then(rowAffected =>{
         if(!affectedCount)
             return res.status(400).send({success:false,data:false})
         res.status(200).send({success:true,data: rowAffected}); 
