@@ -74,15 +74,7 @@ INSERT INTO `chameleon`.`postReactions`
 VALUES
 ("2","1","4","1","2018-06-15 03:14:07 ","2018-06-15 03:14:07 "); 
 
-<<<<<<< Updated upstream
 #for shares dummy data
-INSERT INTO `chameleon`.`shares`
-(`id` ,`postId`,`profileId`,`createdAt`,`updatedAt`)
-VALUES
-(null,"1","1",NOW(),NOW());
-=======
->>>>>>> Stashed changes
-
 INSERT INTO `chameleon`.`shares`
 (`id` ,`postId`,`profileId`,`createdAt`,`updatedAt`)
 VALUES
