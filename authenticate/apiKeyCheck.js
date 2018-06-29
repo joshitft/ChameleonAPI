@@ -30,29 +30,5 @@ const checkJwt = jwt({
     ];
 
 module.exports = {
-    middleware : (req,res,next)=> {
-        if (req.method === 'OPTIONS') {
-            res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-            res.statusCode = 200;
-            res.end();
-            return;
-        }
-        let isPublic = false;
-        let path = req._parsedOriginalUrl ? req._parsedOriginalUrl.pathname : req.originalUrl;
-
-        switch (req.method) {
-            case 'GET':
-                isPublic = publicGet.indexOf(path) !== -1;
-                break;
-            case 'POST':
-                isPublic = publicPost.indexOf(path) !== -1;
-                break;
-        }
-        console.log('=====IisPublic===',isPublic)
-        if (isPublic) {
-            next();
-        } else {
-            checkJwt
-        }
-    }
+    checkJwt,
 };

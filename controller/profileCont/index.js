@@ -1,6 +1,7 @@
 
 const userModel = require('../../db').profile,
     authModel = require('../../db').auth,
+    async = require('async'),
     AuthenticateResult = require('../../authenticate/Result'),
     util = require('../../util');
 
@@ -8,40 +9,32 @@ const userModel = require('../../db').profile,
 exports.addProfileData = (req,res)=> {
     //body object format needed and then checks required
     let response;
-    if (!req.user || !req.user['https://tft']) {
-        response = new AuthenticateResult(422, null, {'message': "User information is not found in token"});
-        res.status(422)
-        res.send(JSON.stringify(response));
-    }
+    if (req.isUserPresent)
+        util.sendResponse.call(this,201,{mesage: 'USER is already added ',user : req.isUserPresent},res);
     else {
         let userDBObj = fetchUserDBObj(req.user['https://tft']);
         if (!userDBObj.authId)
             return res.status(400).send({success: false, data: false, message: 'User id is not present'});
-        authModel.findOne({
-            where: {
-                id: userDBObj.authId
+
+        async.waterfall([
+            function (done) {
+                userModel.create(userDBObj).then(user => done(null, user)).catch(err => done(err, null))
+            },
+            function (user, done) {
+                if (!user) done({message: 'Cant able to add user in profile table'}, null);
+                else authModel.create({
+                    id: userDBObj.authId,
+                    profileId: user.id
+                }).then(user_membership => done(null, user_membership['profile']=user)).catch(err => done(err, null))
             }
-        }).then(user => {
-                if (user)  util.sendResponse.call(this,201,{mesage: 'USER is already added :'+user.id},res);
-                else {
-                    userModel.create(userDBObj)
-                        .then(user => {
-                            if (user) {
-                                authModel.create({
-                                    id: userDBObj.authId,
-                                    profileId: user.id
-                                }).then(user => {
-                                    util.sendResponse.call(this,201,user,res)
-                                }).catch(err => util.errorHandler.call(this,404,{message : 'Error in creating user membership'}, res))
-                            }
-                        }).catch(err => util.errorHandler.call(this,404,{message : 'Error in creating user profile'}, res));
-                }
-            })
-            .catch(err => {
-                util.errorHandler.call(this,404,{message : 'Error in finding user membership'}, res)
-            })
+        ], (err, user) => {
+            if (err || !user)
+                util.errorHandler.call(this, 404, {message: 'Error in creating user membership', error: err}, res)
+            else
+                util.sendResponse.call(this, 201, user, res)
+        });
     }
-}
+};
 
 exports.getUser = (req,res)=>{
     let userID = req.params.id; 

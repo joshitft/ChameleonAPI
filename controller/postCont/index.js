@@ -103,7 +103,6 @@ exports.updatePost = (req,res)=>{
         return res.status(400).send({success:true,data:false});
 
     postDBObj = fetchPostDBObj(req.body);
-    console.log(postDBObj)
     postModel.update(postDBObj,{ where: { id: postID }})
     .spread((affectedCount, affectedRows) => {
         // affectedRows will only be defined in dialects which support returning: true
