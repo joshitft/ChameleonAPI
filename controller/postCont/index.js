@@ -27,7 +27,7 @@ exports.getpost = (req,res)=>{
     if(!parseInt(postID,10))
         return util.errorHandler.call(this,422,{message : 'Error in creating post'}, res)
 
-    postModel.findById(postID)
+    db.post.findById(postID)
     .then(post =>{
         if(!post) return util.errorHandler.call(this,422,{message : 'Error in creating post'}, res)
 
@@ -107,7 +107,7 @@ exports.updatePost = (req,res)=>{
         return res.status(400).send({success:true,data:false});
 
     postDBObj = fetchPostDBObj(req.body);
-    postModel.update(postDBObj,{ where: { id: postID }})
+    db.post.update(postDBObj,{ where: { id: postID }})
     .spread((affectedCount, affectedRows) => {
         // affectedRows will only be defined in dialects which support returning: true
         if(!affectedCount)
@@ -123,7 +123,7 @@ exports.deletePost = (req,res)=>{
     if(!parseInt(postID,10))
         return res.status(400).send({success:false,data:false});
 
-    postModel.destroy({where:{'id':postID}}).then(rowAffected =>{
+    db.post.destroy({where:{'id':postID}}).then(rowAffected =>{
         if(!affectedCount)
             return res.status(400).send({success:false,data:false})
         res.status(200).send({success:true,data: rowAffected}); 
