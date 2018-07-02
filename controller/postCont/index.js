@@ -11,19 +11,25 @@ exports.addPost = (req,res)=>{
     if(!postDBObj.profileId )
         util.errorHandler.call(this,400,{message : 'Profile Id not found'}, res)
 
-    let attachmentDBObj = {
-        fileName: req.file.filename ? req.file.filename : '',
-        fileType: req.file.mimetype
-    };
-    db.attachments.create(attachmentDBObj)
-        .then(attachment =>{
-            postDBObj.attachmentId = attachment.dataValues.id;
-            db.post.create(postDBObj)
-                .then(post=> util.sendResponse.call(this,200,post,res))
-                .catch(err => util.errorHandler.call(this,400,{message : 'Error in creating post'}, res))
-    }).catch(err => {
-        util.errorHandler.call(this,400,{message : 'Error in creating attachment'}, res)
-    });
+    if(req.file){
+        let attachmentDBObj = {
+            fileName: req.file.filename ? req.file.filename : '',
+            fileType: req.file.mimetype
+        };
+        db.attachments.create(attachmentDBObj)
+            .then(attachment =>{
+                postDBObj.attachmentId = attachment.dataValues.id;
+                db.post.create(postDBObj)
+                    .then(post=> util.sendResponse.call(this,200,post,res))
+                    .catch(err => util.errorHandler.call(this,400,{message : 'Error in creating post'}, res))
+            }).catch(err => {
+            util.errorHandler.call(this,400,{message : 'Error in creating attachment'}, res)
+        });
+    }else{
+        db.post.create(postDBObj)
+            .then(post=> util.sendResponse.call(this,200,post,res))
+            .catch(err => util.errorHandler.call(this,400,{message : 'Error in creating post'}, res))
+    }
 };
 //update as per getAllposts
 exports.getpost = (req,res)=>{
