@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
 
     profileId: DataTypes.INTEGER,
     content: DataTypes.TEXT,
-    imageLink: DataTypes.STRING,
+    attachmentId: DataTypes.INTEGER,
     removedAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     createdAt: DataTypes.DATE
-    })
+    });
 
     return post;
 }

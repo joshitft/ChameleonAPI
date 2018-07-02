@@ -8,30 +8,34 @@ exports.addPost = (req,res)=>{
     req.body.imageLink = req.file ? req.file.filename : '';
     let postDBObj = fetchPostDBObj(req.body);
 
-    if(!postDBObj.profileId)
-        return res.status(400).send({success:false,data: false}); //just for begining: make sure all data is present in inserting object
+    if(!postDBObj.profileId )
+        util.errorHandler.call(this,400,{message : 'Profile Id not found'}, res)
 
-    db.post.create(postDBObj)
-    .then(post => {
-        util.sendResponse.call(this,201,post,res)
-    })
-    .catch(err => {
-        util.errorHandler.call(this,400,{message : 'Error in creating post'}, res)
-    })
-    
+    let attachmentDBObj = {
+        fileName: req.file.filename ? req.file.filename : '',
+        fileType: req.file.mimetype
+    };
+    db.attachments.create(attachmentDBObj)
+        .then(attachment =>{
+            postDBObj.attachmentId = attachment.dataValues.id;
+            db.post.create(postDBObj)
+                .then(post=> util.sendResponse.call(this,200,post,res))
+                .catch(err => util.errorHandler.call(this,400,{message : 'Error in creating post'}, res))
+    }).catch(err => {
+        util.errorHandler.call(this,400,{message : 'Error in creating attachment'}, res)
+    });
 };
-//update as per getAllposts
+//get a single post
 exports.getpost = (req,res)=>{
     let postID = req.params.id;
     let resultData = {success: false, data:{}}; 
     if(!parseInt(postID,10))
-        return util.errorHandler.call(this,422,{message : 'Error in finding post'}, res)
-    
-    db.post.findById(postID,{attributes: ['id','profileId','content','imageLink']})
+        return util.errorHandler.call(this,422,{message : "Post with this ID doesn't exist"}, res)
+
+    db.post.findById(postID)
     .then(post =>{
-        if(!post)
-            return util.errorHandler.call(this,422,{message : 'Error in finding post'}, res)
-        
+        if(!post) return util.errorHandler.call(this,422,{message : 'Error in getting the posts'}, res)
+
         resultData.data.post = post;
         let promise = [];
         promise.push(db.profile.findById(post.profileId,{attributes: ['firstName','picture']}));
@@ -85,59 +89,45 @@ exports.getpost = (req,res)=>{
 };
 
 exports.getAllPost = (req,res)=>{
-    /*db.post.findAll({
-        include: [{ model: db.post,
-                    include: [{ 
-                                model: db.comment
-                              },
-                              {
-                                  model: db.postReactions
-                              }
-                            ],
-                }]
-    }).then(profile => {
-        if(!profile)
-            return res.status(400).send({success:false, data:false});
-        const resObj = profile.map(profile => {
-        //tidy up the profile data
-        return Object.assign(
-            {},
-            {
-                firstName: profile.firstName,
-                lastName:profile.lastName,
-                country: profile.country,
-                imageLink: profile.image,
-                
-                posts: profile.posts.map(post => {
-                    //tidy up the post data
-                    return Object.assign(
-                    {},{
-                        content: post.content,
-                        imageLink: post.imageLink,
-                        createdAt: post.createdAt,
-                        numberOfComments: post.comments.length,
-                        numberOfReactions: post.postReactions.length
-                    })
-                })
-            }
-        )});
-        res.status(200).send({success:true, data:resObj});
-    }).catch(err => { 
-        util.errorHandler(err,req,res)
-    })*/
+    const query = `SELECT postTable.*, pro.firstName,pro.lastName,pro.country,pro.city,pro.picture 
+    AS userImage
+    FROM (
+        SELECT y.*,COUNT(sh.id) shareCount
+        FROM (
+            SELECT x.*,COUNT(rec.id) reactCount
+            FROM (
+                SELECT a.id,a.content,a.createdAt,a.profileId AS uid,att.fileName AS postImage
+                    ,COUNT(c.content) AS commentCount
+                FROM posts a
+                LEFT JOIN comments c ON a.id = c.postId
+                LEFT JOIN attachments att ON a.attachmentId = att.id
+                GROUP BY a.id
+                ORDER BY a.createdAt DESC
+                ) x
+            LEFT JOIN postReactions rec ON rec.postId = x.id
+            GROUP BY x.id
+            ) y
+        LEFT JOIN shares sh ON sh.postId = y.id
+        GROUP BY y.id
+        ) postTable
+    LEFT JOIN profiles pro ON pro.id = postTable.uid;`;
 
-    /*add for pagination*/
-    /*const url = require('url'),
-        url_parts = url.parse(req.url, true),
-        offset = (url_parts.query.page - 1) * 10 + ",",
-        limit = "LIMIT "+offset+10;*/
+    let query = "SELECT postTable.* ,pro.firstName ,pro.lastName, pro.country, pro.city,pro.picture AS userImage FROM (SELECT y.* ,COUNT(sh.id) shareCount FROM ( SELECT x.* ,COUNT(rec.id) reactionCount FROM ( SELECT a.id ,a.content ,a.createdAt ,a.profileId AS profileId,a.imageLink AS postImage,COUNT(c.content) AS 'commentCount' FROM posts a LEFT JOIN comments c ON a.id = c.postId GROUP BY a.id ORDER BY a.createdAt DESC) x LEFT JOIN postReactions rec ON rec.postId = x.id GROUP BY x.id ) y LEFT JOIN shares sh ON sh.postId = y.id GROUP BY y.id) postTable LEFT JOIN profiles pro ON pro.id = postTable.profileId";
 
-        db.sequelize.query("SELECT postTable.* ,pro.firstName ,pro.lastName, pro.country, pro.city,pro.picture AS userImage FROM (SELECT y.* ,COUNT(sh.id) shareCount FROM ( SELECT x.* ,COUNT(rec.id) recId FROM ( SELECT a.id ,a.content ,a.createdAt ,a.profileId AS uid,a.imageLink AS postImage,COUNT(c.content) AS 'count' FROM posts a LEFT JOIN comments c ON a.id = c.postId GROUP BY a.id ORDER BY a.createdAt DESC) x LEFT JOIN postReactions rec ON rec.postId = x.id GROUP BY x.id ) y LEFT JOIN shares sh ON sh.postId = y.id GROUP BY y.id) postTable LEFT JOIN profiles pro ON pro.id = postTable.uid", { type: db.sequelize.QueryTypes.SELECT})
+    db.sequelize.query(query, { type: db.sequelize.QueryTypes.SELECT})
+    let query = "SELECT postTable.* ,pro.firstName ,pro.lastName, pro.country, pro.city,pro.picture AS userImage FROM (SELECT y.* ,COUNT(sh.id) shareCount FROM ( SELECT x.* ,COUNT(rec.id) reactionCount FROM ( SELECT a.id ,a.content ,a.createdAt ,a.profileId AS profileId,a.imageLink AS postImage,COUNT(c.content) AS 'commentCount' FROM posts a LEFT JOIN comments c ON a.id = c.postId GROUP BY a.id ORDER BY a.createdAt DESC) x LEFT JOIN postReactions rec ON rec.postId = x.id GROUP BY x.id ) y LEFT JOIN shares sh ON sh.postId = y.id GROUP BY y.id) postTable LEFT JOIN profiles pro ON pro.id = postTable.profileId";
+
+    db.sequelize.query(query, { type: db.sequelize.QueryTypes.SELECT})
         .then(users => {
             util.sendResponse.call(this,200,users,res)
         // We don't need spread here, since only the results will be returned for select queries
-      }).catch(err => util.errorHandler.call(this,400,{message : 'Error in creating post'}, res))
+      }).catch(err => util.errorHandler.call(this,400,{message : 'Error in finding post'}, res))
 
+    db.sequelize.query(query, { type: db.sequelize.QueryTypes.SELECT})
+    .then(users => {
+        util.sendResponse.call(this,201,users,res)
+    // We don't need spread here, since only the results will be returned for select queries
+  }).catch(err => util.errorHandler.call(this,400,{message : 'Error in getting post'}, res))
 };
 
 exports.updatePost = (req,res)=>{
@@ -145,9 +135,8 @@ exports.updatePost = (req,res)=>{
     if(!parseInt(postID,10))
         return res.status(400).send({success:true,data:false});
 
-    postDBObj = fetchPostDBObj(req.body);
-    db.postModel.update(postDBObj,{ where: { id: postID }})
-    postModel.update(postDBObj,{ where: { id: postID }})
+    const postDBObj = fetchPostDBObj(req.body);
+    db.post.update(postDBObj,{ where: { id: postID }})
     .spread((affectedCount, affectedRows) => {
         // affectedRows will only be defined in dialects which support returning: true
         if(!affectedCount)
@@ -163,7 +152,7 @@ exports.deletePost = (req,res)=>{
     if(!parseInt(postID,10))
         return res.status(400).send({success:false,data:false});
 
-    db.postModel.destroy({where:{'id':postID}}).then(rowAffected =>{
+    db.post.destroy({where:{'id':postID}}).then(rowAffected =>{
         if(!affectedCount)
             return res.status(400).send({success:false,data:false})
         res.status(200).send({success:true,data: rowAffected}); 
@@ -178,6 +167,6 @@ function fetchPostDBObj(post){
     return dbObj = {
             profileId: post.profileId,
             content: post.content,
-            imageLink: post.imageLink
+            // imageLink: post.imageLink
         }
 }

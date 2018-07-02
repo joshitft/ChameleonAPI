@@ -3,14 +3,7 @@ const router = require('express').Router(),
     postCont = require('../controller/postCont'),
     upload = require('../util/').Multer.upload();
 
-/*
-POST /post/:userId
-GET /post/:id
-PUT /post/:id
-DEL /post/:id
-*/
-
-
+    
 //Post Creation  
 router.post('/', upload.single('attachment'), postCont.addPost);
 //Post Details

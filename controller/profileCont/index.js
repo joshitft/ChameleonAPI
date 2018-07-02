@@ -8,7 +8,6 @@ const userModel = require('../../db').profile,
 
 exports.addProfileData = (req,res)=> {
     //body object format needed and then checks required
-    let response;
     if (req.isUserPresent)
         util.sendResponse.call(this,201,{mesage: 'USER is already added ',user : req.isUserPresent},res);
     else {
