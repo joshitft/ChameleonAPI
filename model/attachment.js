@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true
         },
         fileName: {
-            type: DataTypes.VARCHAR,
+            type: DataTypes.STRING,
             allowNull: false
         },
         fileType: DataTypes.STRING,
