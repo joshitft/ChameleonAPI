@@ -28,6 +28,7 @@ db.comment = require('../model/commentModel')(sequelize, Sequelize);
 db.post = require('../model/postModel')(sequelize, Sequelize);
 db.following = require('../model/followingsModel')(sequelize,Sequelize);
 db.postReactions = require('../model/postReactions')(sequelize,Sequelize);
+db.attachments= require('../model/attachment')(sequelize,Sequelize);
 
 //Relations
 //db.post.belongsTo(db.profile);  

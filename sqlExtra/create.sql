@@ -1,13 +1,13 @@
 CREATE DATABASE `chameleon`;
 
  CREATE TABLE `chameleon`.`profiles` (
-  `id` INT  AUTO_INCREMENT,
+  `id` INT  AUTO_INCREMENT ,
   `name` VARCHAR(250) ,
   `firstName` VARCHAR(250) ,
   `lastName` VARCHAR(250) ,
   `picture` VARCHAR(250),
   `gender` VARCHAR(10) ,
-  `email` VARCHAR(250) ,
+  `email` VARCHAR(250) UNIQUE,
   `cellularNumber` VARCHAR(250) ,
   `country` VARCHAR(250) ,
   `city` VARCHAR(250) ,
@@ -25,7 +25,7 @@ CREATE DATABASE `chameleon`;
 
  CREATE TABLE `chameleon`.`authLogins` (
   `id` VARCHAR(250),
-  `profileId` INT,
+  `profileId` INT NOT NULL,
   `removedAt` DATETIME DEFAULT NULL,
   `createdAt` DATETIME ,
   `updatedAt` DATETIME ,
@@ -34,9 +34,9 @@ CREATE DATABASE `chameleon`;
 
  CREATE TABLE `chameleon`.`posts` (
   `id` INT  AUTO_INCREMENT,
-  `profileId` INT,
+  `profileId` INT NOT NULL,
   `content` TEXT ,
-  `imageLink` VARCHAR(250),
+  `attachmentId` INT,
   `removedAt` DATETIME DEFAULT NULL,
   `createdAt` DATETIME ,
   `updatedAt` DATETIME ,
@@ -45,7 +45,7 @@ CREATE DATABASE `chameleon`;
 
 CREATE TABLE `chameleon`.`reactionTypes` (
   `id` INT  AUTO_INCREMENT,
-  `name` VARCHAR(250) ,
+  `name` VARCHAR(250) NOT NULL,
   `createdAt` DATETIME ,
   `updatedAt` DATETIME ,
   PRIMARY KEY (`id`)
@@ -53,9 +53,9 @@ CREATE TABLE `chameleon`.`reactionTypes` (
 
 CREATE TABLE `chameleon`.`postReactions` (
   `id` INT  AUTO_INCREMENT,
-  `postId` INT ,
-  `profileId` INT,
-  `reactionTypeId` INT ,
+  `postId` INT NOT NULL,
+  `profileId` INT NOT NULL,
+  `reactionTypeId` INT NOT NULL,
   `removedAt` DATETIME DEFAULT NULL,
   `createdAt` DATETIME ,
   `updatedAt` DATETIME ,
@@ -64,9 +64,9 @@ CREATE TABLE `chameleon`.`postReactions` (
 
 CREATE TABLE `chameleon`.`comments` (
   `id` INT  AUTO_INCREMENT,
-  `postId` INT ,
-  `profileId` INT,
-  `content` TEXT ,
+  `postId` INT NOT NULL,
+  `profileId` INT NOT NULL,
+  `content` TEXT NOT NULL,
   `removedAt` DATETIME DEFAULT NULL,
   `createdAt` DATETIME ,
   `updatedAt` DATETIME ,
@@ -75,8 +75,8 @@ CREATE TABLE `chameleon`.`comments` (
 
 CREATE TABLE `chameleon`.`shares` (
   `id` INT  AUTO_INCREMENT,
-  `postId` INT ,
-  `profileId` INT,
+  `postId` INT NOT NULL,
+  `profileId` INT NOT NULL,
   `removedAt` DATETIME DEFAULT NULL,
   `createdAt` DATETIME ,
   `updatedAt` DATETIME ,
@@ -88,8 +88,18 @@ CREATE TABLE `chameleon`.`shares` (
   `follower` INT NOT NULL,
   `following` INT NOT NULL,
   `removedAt` DATETIME DEFAULT NULL,
-  `createdAt` DATETIME NOT NULL,
-  `updatedAt` DATETIME NOT NULL,
+  `createdAt` DATETIME ,
+  `updatedAt` DATETIME ,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `chameleon`.`attachments` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `fileName` VARCHAR(300) NOT NULL,
+  `fileType` VARCHAR(100),
+  `removedAt` DATETIME DEFAULT NULL,
+  `createdAt` DATETIME ,
+  `updatedAt` DATETIME ,
   PRIMARY KEY (`id`)
 );
 
