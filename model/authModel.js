@@ -1,12 +1,15 @@
 
-module.exports = (sequelize, DataTypes) => { 
+module.exports = (sequelize, DataTypes) => {
 
-    const Login = sequelize.define('authLogins',{
+    return sequelize.define('authLogins',{
         id: {                                           //AUTH ID
             type :DataTypes.STRING,
             primaryKey: true
         },
-        profileId: DataTypes.INTEGER,
+        profileId: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,
         removedAt: DataTypes.DATE
@@ -19,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         }
-    });
-    return Login;
+    })
 };
 

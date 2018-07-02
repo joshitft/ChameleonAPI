@@ -43,13 +43,13 @@ CREATE DATABASE `chameleon`;
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `chameleon`.`reactionTypes` (
-  `id` INT  AUTO_INCREMENT,
-  `name` VARCHAR(250) NOT NULL,
-  `createdAt` DATETIME ,
-  `updatedAt` DATETIME ,
-  PRIMARY KEY (`id`)
-);
+--CREATE TABLE `chameleon`.`reactionTypes` (
+--  `id` INT  AUTO_INCREMENT,
+--  `name` VARCHAR(250) NOT NULL,
+--  `createdAt` DATETIME ,
+--  `updatedAt` DATETIME ,
+--  PRIMARY KEY (`id`)
+--);
 
 CREATE TABLE `chameleon`.`postReactions` (
   `id` INT  AUTO_INCREMENT,

@@ -7,10 +7,13 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true,
             primaryKey: true
         },
-        fileName: DataTypes.STRING,
+        fileName: {
+            type: DataTypes.VARCHAR,
+            allowNull: false
+        },
         fileType: DataTypes.STRING,
         removedAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,
         createdAt: DataTypes.DATE
     })
-}
+};

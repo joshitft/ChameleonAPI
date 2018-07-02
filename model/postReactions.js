@@ -1,18 +1,27 @@
 
 
-module.exports = (sequelize, DataTypes) => { 
-    const postReaction = sequelize.define('postReactions',{
+module.exports = (sequelize, DataTypes) => {
+    return sequelize.define('postReactions',{
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
-        profileId: DataTypes.INTEGER,// add reaction type ID later
-        postId: DataTypes.INTEGER,
-        reactionTypeId: DataTypes.INTEGER,
+        profileId: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        postId: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        reactionTypeId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 1
+        },
         removedAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,
         createdAt: DataTypes.DATE
         })
-    return postReaction;
-    }
+    };
