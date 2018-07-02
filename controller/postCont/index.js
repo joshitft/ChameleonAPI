@@ -4,12 +4,10 @@ const db = require('../../db'),
 
 exports.addPost = (req,res)=>{
     //body object format needed and then checks required
-    console.log(req.file);
-    req.body.imageLink = req.file ? req.file.filename : '';
-    let postDBObj = fetchPostDBObj(req.body);
+    if(!req.isUserPresent) return util.errorHandler(this,422,{message:'User is not present in toekn'},res)
 
-    if(!postDBObj.profileId )
-        util.errorHandler.call(this,400,{message : 'Profile Id not found'}, res)
+    let postDBObj = fetchPostDBObj(req.body);
+    if(!postDBObj.profileId ) return util.errorHandler.call(this,400,{message : 'Profile Id not found'}, res)
 
     if(req.file){
         let attachmentDBObj = {
@@ -127,6 +125,5 @@ function fetchPostDBObj(post){
     return dbObj = {
             profileId: post.profileId,
             content: post.content,
-            // imageLink: post.imageLink
         }
 }
