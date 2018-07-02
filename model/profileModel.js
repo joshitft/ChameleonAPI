@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, DataTypes) => {
-    const profile = sequelize.define('profiles', {
+    return sequelize.define('profiles', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -33,5 +33,4 @@ module.exports = (sequelize, DataTypes) => {
             }
         }
     })
-    return profile;
-}
+};

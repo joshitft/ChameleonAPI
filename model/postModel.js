@@ -1,20 +1,20 @@
 
-module.exports = (sequelize, DataTypes) => {  
+module.exports = (sequelize, DataTypes) => {
 
-    const post = sequelize.define('posts',{
+    return sequelize.define('posts',{
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-
-    profileId: DataTypes.INTEGER,
+    profileId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     content: DataTypes.TEXT,
     attachmentId: DataTypes.INTEGER,
     removedAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     createdAt: DataTypes.DATE
     });
-
-    return post;
-}
+};
