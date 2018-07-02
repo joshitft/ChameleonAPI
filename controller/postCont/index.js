@@ -1,5 +1,6 @@
 const db = require('../../db'),
-    util = require('../../util');
+    util = require('../../util'),
+    commentCont = require('../commentCont')
 
 
 exports.addPost = (req,res)=>{
@@ -41,12 +42,8 @@ exports.getpost = (req,res)=>{
         promise.push(db.profile.findById(post.profileId,{attributes: ['firstName','picture']}));
         promise.push(db.postReactions.count({ where: {'postId':post.id}}));
         promise.push(db.share.count({ where: {'postId':post.id}}));
-        promise.push(db.comment.findAll(
-            {
-                where:{'postId':post.id}, 
-                attributes: ['profileId','content','createdAt']
-            }
-        ));
+        promise.push(commentCont.getComments(post.id,['profileId','content','createdAt']));
+        promise.push(db.attachments.findById(post.attachmentId,{attributes: ['fileName']}))
         return Promise.all(promise)
     },rejectionCB)
     .then(postrelatedData => {
@@ -55,6 +52,7 @@ exports.getpost = (req,res)=>{
         resultData.data.reactionCount = postrelatedData[1];
         resultData.data.shareCount = postrelatedData[2];
         resultData.data.comments = postrelatedData[3];
+        resultData.data.post.dataValues.attachment = postrelatedData[4].fileName;
 
         let commentArr = postrelatedData[3];
         let promise = [];
@@ -122,32 +120,32 @@ exports.getAllPost = (req,res)=>{
 exports.updatePost = (req,res)=>{
     let postID = req.params.id; 
     if(!parseInt(postID,10))
-        return res.status(400).send({success:true,data:false});
+        return util.errorHandler.call(this,400,{message : 'invalid postID'}, res);
 
     const postDBObj = fetchPostDBObj(req.body);
     db.post.update(postDBObj,{ where: { id: postID }})
     .spread((affectedCount, affectedRows) => {
         // affectedRows will only be defined in dialects which support returning: true
         if(!affectedCount)
-            return res.status(400).send({success:false, data:false});
-        res.status(200).send({data:affectedCount});
-    }).catch(err => { 
-        util.errorHandler(err,req,res)
-    })  
+            return util.errorHandler.call(this,400,{message : 'postId not found'}, res);
+        util.sendResponse.call(this,200,affectedCount,res);
+    }).catch(err => {
+        util.errorHandler.call(this,400,{message : 'Error in updating post'}, res);
+    })
 };
 
 exports.deletePost = (req,res)=>{
     let postID = req.params.id;
     if(!parseInt(postID,10))
-        return res.status(400).send({success:false,data:false});
+        return util.errorHandler.call(this,400,{message : 'invalid postId'}, res);
 
     db.post.destroy({where:{'id':postID}}).then(rowAffected =>{
         if(!affectedCount)
-            return res.status(400).send({success:false,data:false})
-        res.status(200).send({success:true,data: rowAffected}); 
+            return util.errorHandler.call(this,400,{message : 'postId not found'}, res);
+        util.sendResponse.call(this,200,affectedCount,res);
     })
     .catch(err => { 
-        util.errorHandler(err,req,res)
+        util.errorHandler.call(this,400,{message : 'Error in deleting post'}, res);
     })
 };
 
