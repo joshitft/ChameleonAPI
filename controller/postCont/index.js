@@ -112,22 +112,11 @@ exports.getAllPost = (req,res)=>{
         ) postTable
     LEFT JOIN profiles pro ON pro.id = postTable.uid;`;
 
-    let query = "SELECT postTable.* ,pro.firstName ,pro.lastName, pro.country, pro.city,pro.picture AS userImage FROM (SELECT y.* ,COUNT(sh.id) shareCount FROM ( SELECT x.* ,COUNT(rec.id) reactionCount FROM ( SELECT a.id ,a.content ,a.createdAt ,a.profileId AS profileId,a.imageLink AS postImage,COUNT(c.content) AS 'commentCount' FROM posts a LEFT JOIN comments c ON a.id = c.postId GROUP BY a.id ORDER BY a.createdAt DESC) x LEFT JOIN postReactions rec ON rec.postId = x.id GROUP BY x.id ) y LEFT JOIN shares sh ON sh.postId = y.id GROUP BY y.id) postTable LEFT JOIN profiles pro ON pro.id = postTable.profileId";
-
-    db.sequelize.query(query, { type: db.sequelize.QueryTypes.SELECT})
-    let query = "SELECT postTable.* ,pro.firstName ,pro.lastName, pro.country, pro.city,pro.picture AS userImage FROM (SELECT y.* ,COUNT(sh.id) shareCount FROM ( SELECT x.* ,COUNT(rec.id) reactionCount FROM ( SELECT a.id ,a.content ,a.createdAt ,a.profileId AS profileId,a.imageLink AS postImage,COUNT(c.content) AS 'commentCount' FROM posts a LEFT JOIN comments c ON a.id = c.postId GROUP BY a.id ORDER BY a.createdAt DESC) x LEFT JOIN postReactions rec ON rec.postId = x.id GROUP BY x.id ) y LEFT JOIN shares sh ON sh.postId = y.id GROUP BY y.id) postTable LEFT JOIN profiles pro ON pro.id = postTable.profileId";
-
     db.sequelize.query(query, { type: db.sequelize.QueryTypes.SELECT})
         .then(users => {
             util.sendResponse.call(this,200,users,res)
         // We don't need spread here, since only the results will be returned for select queries
       }).catch(err => util.errorHandler.call(this,400,{message : 'Error in finding post'}, res))
-
-    db.sequelize.query(query, { type: db.sequelize.QueryTypes.SELECT})
-    .then(users => {
-        util.sendResponse.call(this,201,users,res)
-    // We don't need spread here, since only the results will be returned for select queries
-  }).catch(err => util.errorHandler.call(this,400,{message : 'Error in getting post'}, res))
 };
 
 exports.updatePost = (req,res)=>{
