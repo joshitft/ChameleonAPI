@@ -39,6 +39,7 @@ db.profile.hasMany(db.post);
 db.profile.hasMany(db.comment);
 db.profile.hasMany(db.postReactions);
 db.profile.hasMany(db.share);
+
 //db.comment.belongsTo(db.post);
 db.post.hasMany(db.comment);
 //db.postReactions.belongsTo(db.post);  

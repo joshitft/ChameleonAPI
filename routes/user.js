@@ -7,16 +7,9 @@ const router = require('express').Router(),
 
     Followers = require('../controller/profileCont/followers');
 
-router.use(':user_id',(req,res,next)=>{
-    if(req.params.user_id == req.isUserPresent.authId)
-        next();
-    else
-        util.errorHandler.call(this,422,{message : 'User param id is not same as passed in token'},res)
-})
-
 router.post('/',  User.addProfileData);                       //Add user
 router.get('/:user_id', User.getUser);                       //User Details
-router.put('/:user_id', User.updateUser);                  //Update User
+router.put('/', User.updateUser);                  //Update User
 router.delete('/:user_id', User.deleteUser);                //Delete User
 
 

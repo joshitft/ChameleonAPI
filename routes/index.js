@@ -34,9 +34,8 @@ router.use('/',(req,res,next)=>{
             },
             include: [{ model: db.profile}]
         }).then(user => {
-            if(user) {
-                req.isUserPresent = user;
-            }
+            if(user)
+                req.isUserPresent = user.toJSON();
             next()
         })
     }

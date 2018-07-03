@@ -1,14 +1,14 @@
-const followingModel = require('../../db').following,
+const db = require('../../db'),
     util = require('../../util')
 
 exports.getFollowers = (req,res)=>{
     const id = req.params.id;
-    followingModel.findAll({
+    db.following.findAll({
         where: {
             following: id
         }
     })
-        .then(data => res.status(200).send({success: true,data}))
+        .then(data => util.sendResponse.call(this,200,post,data))
         .catch(err=> {
             util.errorHandler(err,req,res)
         })
@@ -16,31 +16,45 @@ exports.getFollowers = (req,res)=>{
 
 exports.getFollowings = (req,res)=>{
     const id = req.params.id;
-    followingModel.findAll({
+    db.following.findAll({
         where: {
             follower: id
         }
     })
-        .then(data => res.status(200).send({success: true,data}))
+        .then(data => util.sendResponse.call(this,200,data,res))
         .catch(err=> {
-            util.errorHandler(err,req,res)
+            util.errorHandler.call(this,422,{message:`Error`,err},res)
         })
     };
 
 exports.addFollower = (req,res)=>{
-    const toFollow = req.body[0].toFollow;
-    const userId = req.body[0].userId;
+    const currUser = req.isUserPresent.profileId;
+    const toFollow = req.body.toFollow;
 
-    followingModel.findOrCreate({
+    if(!currUser) return util.errorHandler.call(this,422,{message:'User is not present in token'},res);
+    if(!toFollow) return util.errorHandler.call(this,422,{message:'User to follow is not  present in parameters'},res);
+    if(toFollow == currUser) return util.errorHandler.call(this,422,{message:`Can't follow yourself`},res)
+
+    db.profile.findOne({
         where: {
-            follower: userId,
-            following: toFollow
+            id : toFollow
         }
-    })
-        .then(data => {
-            res.status(200).send({success: true,data})
-        })
-        .catch(err=> {
-            util.errorHandler(err,req,res)
-        })
+    }).then(user => {
+        if (user){
+            db.following.findOrCreate({
+                where: {
+                    follower: currUser,
+                    following: toFollow
+                }
+            })
+                .then(data => {
+                    util.sendResponse.call(this,200,data,res)
+                })
+                .catch(err=> {
+                    util.errorHandler(err,req,res)
+                })
+        }else{
+            util.errorHandler.call(this,422,{message:`The user to follow with ID ${toFollow} doesn't exist`},res)
+        }
+    }).catch(err => util.errorHandler(err,req,res))
     };

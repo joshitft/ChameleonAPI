@@ -7,7 +7,7 @@ exports.addComment = (req,res)=>{
         expecting comment object in body as:
         {
             postId: int,
-            profileId: int,
+            profileId: req.isUserPresent.profileId,
             content: text 
         }
     */

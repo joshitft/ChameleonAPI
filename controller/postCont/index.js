@@ -8,7 +8,7 @@ exports.addPost = (req,res)=>{
     if(!req.isUserPresent) return util.errorHandler(this,422,{message:'User is not present in toekn'},res)
 
     let postDBObj = fetchPostDBObj(req.body);
-    postDBObj.profileId = req.isUserPresent.dataValues.profileId;
+    postDBObj.profileId = req.isUserPresent.profileId;
     if(!postDBObj.profileId ) return util.errorHandler.call(this,400,{message : 'Profile Id not found'}, res)
 
     if(req.file){
@@ -18,7 +18,7 @@ exports.addPost = (req,res)=>{
         };
         db.attachments.create(attachmentDBObj)
             .then(attachment =>{
-                postDBObj.attachmentId = attachment.dataValues.id;
+                postDBObj.attachmentId = attachment.id;
                 db.post.create(postDBObj)
                     .then(post=> util.sendResponse.call(this,200,post,res))
                     .catch(err => util.errorHandler.call(this,400,{message : 'Error in creating post'}, res))

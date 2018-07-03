@@ -44,7 +44,6 @@ exports.getUser = (req,res)=>{
 }
 
 exports.updateUser = (req,res)=>{
-    let userID = req.params.id; 
     if(!req.isUserPresent) return util.errorHandler.call(this, 404, {message: 'Cant find user', error: err}, res)
 
     userModel.update(req.body,{ where: { id: req.isUserPresent.profileId }})
