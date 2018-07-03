@@ -15,5 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         removedAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,
         createdAt: DataTypes.DATE
+    }, {
+        instanceMethods: {
+            toJSON: function () {
+                return this;
+            }
+        }
     })
 };

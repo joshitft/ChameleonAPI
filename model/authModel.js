@@ -16,10 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     },{
         instanceMethods: {
             toJSON: function () {
-                return {
-                    id: this.id,
-                    profileId: this.profileId,
-                }
+                return this
             }
         }
     })
