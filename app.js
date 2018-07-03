@@ -3,7 +3,7 @@ let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let app = express(),
-    cors = require('cors');
+    cors = require('cors'),
     db = require('./db');
 
 

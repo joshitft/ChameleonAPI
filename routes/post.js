@@ -1,9 +1,24 @@
 
 const router = require('express').Router(),
     postCont = require('../controller/postCont'),
+    db = require('../db'),
     upload = require('../util/').Multer.upload();
 
-    
+router.use(':post_id',(req,res,next)=>{
+    db.post.findOne({
+        where : {
+            id : req.params.post_id
+        }
+    }).then(user_post => {
+        if(user_post) {
+            req.user_post = user_post;
+            next()
+        }
+        else next()
+    })
+})
+
+
 //Post Creation  
 router.post('/', upload.single('attachment'), postCont.addPost);
 //Post Details

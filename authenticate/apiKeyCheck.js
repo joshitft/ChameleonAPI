@@ -1,11 +1,11 @@
 // let logger = require('./../logger');
+// Authentication middleware. When used, the
+// Access Token must exist and be verified against
+// the Auth0 JSON Web Key Set
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa'),
     config = require('../config/config.json')[process.env.NODE_ENV || 'development'];
 
-// Authentication middleware. When used, the
-// Access Token must exist and be verified against
-// the Auth0 JSON Web Key Set
 const checkJwt = jwt({
         // Dynamically provide a signing key
         // based on the kid in the header and
@@ -31,4 +31,6 @@ const checkJwt = jwt({
 
 module.exports = {
     checkJwt : checkJwt,
+    publicGet,
+    publicPost
 };

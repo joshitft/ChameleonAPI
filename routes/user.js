@@ -7,24 +7,6 @@ const router = require('express').Router(),
 
     Followers = require('../controller/profileCont/followers');
 
-router.use('/',(req,res,next)=>{
-    if(req.user && req.user['https://tft']){
-        db.auth.findOne({
-            where: {
-                id: req.user['https://tft']._id
-            },
-            include: [{ model: db.profile}]
-        }).then(user => {
-            if(user) {
-                req.isUserPresent = user;
-            }
-            next()
-        })
-    }
-    else
-        return util.errorHandler.call(this,422,{message : 'User Object is not present in token'},res)
-});
-
 router.use(':user_id',(req,res,next)=>{
     if(req.params.user_id == req.isUserPresent.authId)
         next();
