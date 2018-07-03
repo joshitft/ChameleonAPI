@@ -38,7 +38,7 @@ exports.addProfileData = (req,res)=> {
 
 exports.getUser = (req,res)=>{
     if(!req.isUserPresent)
-        util.errorHandler.call(this, 404, {message: 'Cant find user', error: err}, res)
+        util.errorHandler.call(this, 404, {message: 'Cant find user'}, res)
     else
         util.sendResponse.call(this, 201, req.isUserPresent.profile, res)
 }
