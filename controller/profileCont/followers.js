@@ -5,12 +5,12 @@ exports.getFollowers = (req,res)=>{
     const id = req.params.id;
     db.following.findAll({
         where: {
-            following: id
+            following: id,
         }
     })
-        .then(data => util.sendResponse.call(this,200,post,data))
+        .then(data => util.sendResponse.call(this,200,data,res))
         .catch(err=> {
-            util.errorHandler(err,req,res)
+            util.errorHandler.call(this,422,{message:`Error`,err},res)
         })
     };
 

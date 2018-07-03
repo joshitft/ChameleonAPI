@@ -5,7 +5,7 @@ const db = require('../../db'),
 
 exports.addPost = (req,res)=>{
     //body object format needed and then checks required
-    if(!req.isUserPresent) return util.errorHandler(this,422,{message:'User is not present in toekn'},res)
+    if(!req.isUserPresent) return util.errorHandler.call(this,422,{message:'User is not present in toekn'},res)
 
     let postDBObj = fetchPostDBObj(req.body);
     postDBObj.profileId = req.isUserPresent.profileId;
