@@ -40,7 +40,8 @@ exports.getpost = (req,res)=>{
 
     db.post.findById(postID)
     .then(post =>{
-        if(!post) return util.errorHandler.call(this,422,{message : 'Error in getting the posts'}, res)
+        if(!post) 
+            throw new Error("no post found")
 
         resultData.data.post = post;
         let promise = [];
@@ -50,7 +51,7 @@ exports.getpost = (req,res)=>{
         promise.push(commentCont.getComments(post.id,['profileId','content','createdAt']));
         promise.push(db.attachments.findById(post.attachmentId,{attributes: ['fileName']}))
         return Promise.all(promise)
-    },rejectionCB)
+    })
     .then(postrelatedData => {
         
         resultData.data.user = postrelatedData[0];
@@ -67,28 +68,22 @@ exports.getpost = (req,res)=>{
         }
 
         return Promise.all(promise)
-    },rejectionCB)
+    })
     .then(commentingUsers =>{
         for(let i=0;i<commentingUsers.length;i++){
             resultData.data.comments[i].dataValues.userName = commentingUsers[i].firstName;
             resultData.data.comments[i].dataValues.picture = commentingUsers[i].picture;
         }
-        sendPostData();
         
-    },rejectionCB)
+        util.sendResponse.call(this,200,users,res)
+        
+    })
     .catch(err =>
-         util.errorHandler.call(this,400,{message : 'Error in finding post'}, res)
+        {
+            console.log(err.message,);
+            util.errorHandler.call(this,400,{message : 'Error in finding post'}, res)
+        }
     );
-
-    function sendPostData(){
-        resultData.success = true;
-        res.status(200).send(resultData);
-    }
-
-    function rejectionCB(rejErr){
-        console.log("Promise Rejection: ",rejErr )
-        util.errorHandler.call(this,400,{message : 'Error in finding post'}, res)
-    }
 };
 
 exports.getAllPost = (req,res)=>{
