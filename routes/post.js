@@ -1,6 +1,7 @@
 
 const router = require('express').Router(),
     postCont = require('../controller/postCont'),
+    reactCont = require('../controller/postCont/reactions'),
     db = require('../db'),
     upload = require('../util/').Multer.upload();
 
@@ -22,13 +23,15 @@ router.use(':post_id',(req,res,next)=>{
 //Post Creation  
 router.post('/', upload.single('attachment'), postCont.addPost);
 //Post Details
-router.get('/:id', postCont.getpost)
+router.get('/:id', postCont.getpost);
 //all post
-router.get('/', postCont.getAllPost)
-
+router.get('/', postCont.getAllPost);
 //Post updatation
 router.put('/:id', postCont.updatePost);
 //Post Deletion
 router.delete('/:id', postCont.deletePost);
+
+//React to a post
+router.post('/react', reactCont.addreactionToPost);
 
 module.exports = router;
