@@ -32,6 +32,7 @@ router.put('/:id', postCont.updatePost);
 router.delete('/:id', postCont.deletePost);
 
 //React to a post
-router.post('/react', reactCont.addreactionToPost);
+router.post('/react', reactCont.addReactionToPost);
+router.delete('/react', reactCont.removeReactionFromPost);
 
 module.exports = router;
