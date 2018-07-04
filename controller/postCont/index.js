@@ -65,7 +65,7 @@ exports.getpost = (req,res)=>{
         let promise = [];
         for(let i=0; i<commentArr.length;i++)
         {
-            promise.push(db.profile.findById(commentArr[i].profileId,{attributes: ['firstName','picture']}))
+            promise.push(db.profile.findById(commentArr[i].profileId,{attributes: ['firstName','lastName','picture']}))
         }
 
         return Promise.all(promise)
@@ -73,7 +73,7 @@ exports.getpost = (req,res)=>{
     .then(commentingUsers =>{
         
         for(let i=0;i<commentingUsers.length;i++){
-             resultData.comments[i].userName = commentingUsers[i].firstName;
+             resultData.comments[i].dataValues.userName = commentingUsers[i].firstName+" "+commentingUsers[i].lastName;
              resultData.comments[i].dataValues.picture = commentingUsers[i].picture;
         }
         
