@@ -34,7 +34,7 @@ exports.addPost = (req,res)=>{
 //get a single post
 exports.getpost = (req,res)=>{
     let postID = req.params.id;
-    let resultData = {success: false, data:{}}; 
+    let resultData = {}; 
     if(!parseInt(postID,10))
         return util.errorHandler.call(this,422,{message : "Post with this ID doesn't exist"}, res)
 
@@ -43,7 +43,7 @@ exports.getpost = (req,res)=>{
         if(!post) 
             throw new Error("no post found")
 
-        resultData.data.post = post;
+        resultData.post = post;
         let promise = [];
         promise.push(db.profile.findById(post.profileId,{attributes: ['firstName','picture']}));
         promise.push(db.postReactions.count({ where: {'postId':post.id}}));
@@ -53,12 +53,13 @@ exports.getpost = (req,res)=>{
         return Promise.all(promise)
     })
     .then(postrelatedData => {
-        
-        resultData.data.user = postrelatedData[0];
-        resultData.data.reactionCount = postrelatedData[1];
-        resultData.data.shareCount = postrelatedData[2];
-        resultData.data.comments = postrelatedData[3];
-        resultData.data.post.dataValues.attachment = postrelatedData[4].fileName;
+        if(!postrelatedData)
+            throw new Error("no post data found");
+        resultData.user = postrelatedData[0];
+        resultData.reactionCount = postrelatedData[1];
+        resultData.shareCount = postrelatedData[2];
+        resultData.comments = postrelatedData[3];
+        resultData.post.dataValues.attachment = postrelatedData[4].fileName;
 
         let commentArr = postrelatedData[3];
         let promise = [];
@@ -70,12 +71,13 @@ exports.getpost = (req,res)=>{
         return Promise.all(promise)
     })
     .then(commentingUsers =>{
+        
         for(let i=0;i<commentingUsers.length;i++){
-            resultData.data.comments[i].dataValues.userName = commentingUsers[i].firstName;
-            resultData.data.comments[i].dataValues.picture = commentingUsers[i].picture;
+             resultData.comments[i].userName = commentingUsers[i].firstName;
+             resultData.comments[i].dataValues.picture = commentingUsers[i].picture;
         }
         
-        util.sendResponse.call(this,200,users,res)
+        util.sendResponse.call(this,200,resultData,res)
         
     })
     .catch(err =>
