@@ -1,17 +1,20 @@
 const db = require('../../db'),
     util = require('../../util');
- 
+    
+//req.isUserPresent.profileId 
 
 exports.addComment = (req,res)=>{
     /*
         expecting comment object in body as:
         {
             postId: int,
-            profileId: req.isUserPresent.profileId,
             content: text 
         }
     */
    let commentObj = req.body;
+console.log(req.isUserPresent)
+   commentObj.profileId = 1;
+   
    db.comment.create(commentObj)
    .then(comment =>{
        util.sendResponse.call(this,200,comment,res)
