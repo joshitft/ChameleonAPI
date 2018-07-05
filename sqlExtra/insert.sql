@@ -91,4 +91,9 @@ VALUES
 INSERT INTO `chameleon`.`followings`
 (`id` ,`following` ,`follower`,`createdAt`,`updatedAt`)
 VALUES
-(2,2,1,NOW(),NOW());
+
+#for reactionTypes table
+INSERT INTO `chameleon`.`reactionTypes`
+(`id` ,`name`,`createdAt`,`updatedAt`)
+VALUES
+(null,'like',NOW(),NOW());

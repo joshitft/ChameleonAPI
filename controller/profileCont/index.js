@@ -8,8 +8,13 @@ const userModel = require('../../db').profile,
 
 exports.addProfileData = (req,res)=> {
     //body object format needed and then checks required
-    if (req.isUserPresent)
-        util.sendResponse.call(this,201,{mesage: 'USER is already added ',user : req.isUserPresent},res);
+    if (req.isUserPresent){
+        const finalData = {
+            user:req.isUserPresent,
+            authToken: req.headers.authorization
+        };
+        util.sendResponse.call(this,201,{mesage: 'USER is already added ',user : finalData},res);
+    }
     else {
         let profile,userDBObj = fetchUserDBObj(req.user['https://tft']);
 
@@ -30,7 +35,11 @@ exports.addProfileData = (req,res)=> {
             else {
                 let obj = user.toJSON();
                 obj.profile = profile.toJSON();
-                util.sendResponse.call(this, 201, obj, res)
+                const finalData = {
+                    user:obj,
+                    authToken: req.headers.authorization
+                };
+                util.sendResponse.call(this, 201, finalData, res)
             }
         });
     }

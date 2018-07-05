@@ -48,7 +48,6 @@ router.get('/', function(req, res) {
 });
 
 router.use('/user',require('./user'));
-router.use('/auth',require('./auth'));
 router.use('/post',require('./post'));
 router.use('/search',require('./search'));
 router.use('/comment',require('./comment'));
