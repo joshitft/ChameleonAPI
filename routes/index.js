@@ -52,7 +52,6 @@ router.use('/auth',require('./auth'));
 router.use('/post',require('./post'));
 router.use('/search',require('./search'));
 router.use('/comment',require('./comment'));
-router.use('/share',require('./share'));
 
 
 module.exports = router;

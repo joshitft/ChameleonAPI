@@ -2,6 +2,7 @@
 const router = require('express').Router(),
     postCont = require('../controller/postCont'),
     reactCont = require('../controller/postCont/reactions'),
+    shareCont = require('../controller/postCont/share'),
     db = require('../db'),
     upload = require('../util/').Multer.upload();
 
@@ -34,5 +35,9 @@ router.delete('/:id', postCont.deletePost);
 //React to a post
 router.post('/react', reactCont.addReactionToPost);
 router.delete('/react', reactCont.removeReactionFromPost);
+
+//share a post
+router.post('/share/:postId', shareCont.shareAPost);
+router.delete('/share/:postId', shareCont.unshareAPost);
 
 module.exports = router;
