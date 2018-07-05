@@ -53,7 +53,7 @@ exports.deleteComment = (req,res)=>{
     if(!parseInt(commentId,10))
         return util.errorHandler.call(this,400,{message : 'invalid commentId'}, res);
 
-    db.post.destroy({where:{'id':commentId}}).then(rowAffected =>{
+    db.post.destroy({where:{'id':commentId}}).then(affectedCount =>{
         if(!affectedCount)
             return util.errorHandler.call(this,400,{message : 'commentId not found'}, res);
         util.sendResponse.call(this,200,affectedCount,res);
