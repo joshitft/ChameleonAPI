@@ -58,3 +58,27 @@ exports.addFollower = (req,res)=>{
         }
     }).catch(err => util.errorHandler(err,req,res))
     };
+
+exports.unfollowSomeone = (req,res)=>{
+    const profileId = req.isUserPresent.profile.id,
+        toUnfollow = req.params.userId;
+console.log(profileId)
+    db.profile.findOne({
+        where: {
+            id: toUnfollow
+        }
+    })
+        .then(user=>{
+            if(!user)
+                throw  new Error(`User to unfollow doesn't exist`);
+            return db.following.destroy({
+                where:{
+                    follower: profileId,
+                    following: toUnfollow
+                }
+            })
+        })
+        .then(result=> util.sendResponse.call(this,200,result,res))
+        .catch(err=> util.errorHandler.call(this,400,{message : err.message}, res))
+
+};

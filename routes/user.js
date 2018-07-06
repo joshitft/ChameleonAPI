@@ -16,5 +16,6 @@ router.delete('/:user_id', User.deleteUser);                //Delete User
 router.get('/getfollowers/:id', Followers.getFollowers);
 router.get('/getfollowings/:id', Followers.getFollowings);
 router.post('/follow', Following.addFollower);
+router.delete('/follow/:userId', Following.unfollowSomeone);
 
 module.exports = router;
