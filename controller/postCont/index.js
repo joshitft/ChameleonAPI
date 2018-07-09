@@ -40,72 +40,72 @@ exports.getpost = (req,res)=>{
 
     db.post.findById(postID)
     .then(post =>{
-        if(!post) 
+        if(!post)
             throw new Error(`No post found with ID ${postID}`)
 
-        resultData.post = post;
-        let promise = [];
-        promise.push(db.profile.findById(post.profileId,{attributes: ['firstName','picture']}));
-        promise.push(db.postReactions.findAll({ where: {'postId':post.id}, attributes:['profileId','reactionTypeId']}));
-        promise.push(db.share.count({ where: {'postId':post.id}}));
-        promise.push(commentCont.getComments(post.id,['profileId','content','createdAt']));
-        promise.push(db.attachments.findById(post.attachmentId,{attributes: ['fileName']}))
-        return Promise.all(promise)
-    })
-    .then(postrelatedData => {
-        if(!postrelatedData)
-            throw new Error("Error in fetching post related data");
-        resultData.user = postrelatedData[0];
-        resultData.reactions = postrelatedData[1];
-        resultData.shareCount = postrelatedData[2];
-        resultData.comments = postrelatedData[3];
-        resultData.post.dataValues.attachment = postrelatedData[4].fileName;
-        
-        let reactionArr = postrelatedData[1],
-            promise = [];
-        if(!reactionArr.length)
-            return null
-        for(let i=0; i<reactionArr.length;i++)
-        {
-            promise.push(db.profile.findById(reactionArr[i].profileId,{attributes: ['firstName','lastName','picture']}))
-        }
-        return Promise.all(promise)
-    })
-    .then(reactionUsers => {
-        if(reactionUsers)
-        {
-            for(let i=0;i<reactionUsers.length;i++){
-                resultData.reactions[i].dataValues.userName = reactionUsers[i].dataValues.firstName+" "+reactionUsers[i].lastName;
-                resultData.reactions[i].dataValues.picture = reactionUsers[i].dataValues.picture;
+            resultData.post = post;
+            let promise = [];
+            promise.push(db.profile.findById(post.profileId,{attributes: ['firstName','picture']}));
+            promise.push(db.postReactions.findAll({ where: {'postId':post.id}, attributes:['profileId','reactionTypeId']}));
+            promise.push(db.share.count({ where: {'postId':post.id}}));
+            promise.push(commentCont.getComments(post.id,['profileId','content','createdAt']));
+            promise.push(db.attachments.findById(post.attachmentId,{attributes: ['fileName']}))
+            return Promise.all(promise)
+        })
+        .then(postrelatedData => {
+            if(!postrelatedData)
+                throw new Error("Error in fetching post related data");
+            resultData.user = postrelatedData[0];
+            resultData.reactions = postrelatedData[1];
+            resultData.shareCount = postrelatedData[2];
+            resultData.comments = postrelatedData[3];
+            resultData.post.dataValues.attachment = postrelatedData[4] ? postrelatedData[4].fileName :'';
+
+            let reactionArr = postrelatedData[1],
+                promise = [];
+            if(!reactionArr.length)
+                return null
+            for(let i=0; i<reactionArr.length;i++)
+            {
+                promise.push(db.profile.findById(reactionArr[i].profileId,{attributes: ['firstName','lastName','picture']}))
             }
-        }
-        let commentArr = resultData.comments,
-            promise = [];
-        if(!commentArr)
-            return null    
-        for(let i=0; i<commentArr.length;i++)
-        {
-            promise.push(db.profile.findById(commentArr[i].profileId,{attributes: ['firstName','lastName','picture']}))
-        }
-        
-        return Promise.all(promise)
-    })
-    .then(commentingUsers =>{
-        if(commentingUsers)
-        {
-            for(let i=0;i<commentingUsers.length;i++){
-                resultData.comments[i].dataValues.userName = commentingUsers[i].firstName+" "+commentingUsers[i].lastName;
-                resultData.comments[i].dataValues.picture = commentingUsers[i].picture;
+            return Promise.all(promise)
+        })
+        .then(reactionUsers => {
+            if(reactionUsers)
+            {
+                for(let i=0;i<reactionUsers.length;i++){
+                    resultData.reactions[i].dataValues.userName = reactionUsers[i].dataValues.firstName+" "+reactionUsers[i].lastName;
+                    resultData.reactions[i].dataValues.picture = reactionUsers[i].dataValues.picture;
+                }
             }
-        }
-        util.sendResponse.call(this,200,resultData,res)
-        
-    })
-    .catch(err =>
-        {
-            util.errorHandler.call(this,400,{message : err.message}, res)
-        }
-    );
+            let commentArr = resultData.comments,
+                promise = [];
+            if(!commentArr)
+                return null
+            for(let i=0; i<commentArr.length;i++)
+            {
+                promise.push(db.profile.findById(commentArr[i].profileId,{attributes: ['firstName','lastName','picture']}))
+            }
+
+            return Promise.all(promise)
+        })
+        .then(commentingUsers =>{
+            if(commentingUsers)
+            {
+                for(let i=0;i<commentingUsers.length;i++){
+                    resultData.comments[i].dataValues.userName = commentingUsers[i].firstName+" "+commentingUsers[i].lastName;
+                    resultData.comments[i].dataValues.picture = commentingUsers[i].picture;
+                }
+            }
+            util.sendResponse.call(this,200,resultData,res)
+
+        })
+        .catch(err =>
+            {
+                util.errorHandler.call(this,400,{message : err.message}, res)
+            }
+        );
 };
 
 exports.getAllPost = (req,res)=>{
