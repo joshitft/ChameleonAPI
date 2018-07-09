@@ -21,11 +21,18 @@ exports.addComment = (req,res)=>{
    })
 };
 
-exports.getComments = (postId,attributes)=>{
-    return db.comment.findAll({
-        where:{"postId":postId},
-        attributes: attributes
-        })          
+exports.getComments = (req,res)=>{
+    let postId = req.params.id;
+    db.comment.findAll({
+        where : {postId : postId},
+        attributes: ['id','content','createdAt'],
+        include : [{
+            model: db.profile,
+            attributes: ['id','firstName','lastName','picture']
+        }]
+    })
+        .then(comment => util.sendResponse.call(this,200,comment,res))
+        .catch(err => util.errorHandler.call(this,400,{message : err.message}, res))
 };
 
 exports.updateComment = (req,res)=>{    

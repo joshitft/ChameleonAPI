@@ -35,9 +35,9 @@ db.attachments= require('../model/attachmentModel')(sequelize,Sequelize);
 //Relations
 //db.post.belongsTo(db.profile);  
 db.auth.belongsTo(db.profile);
+db.comment.belongsTo(db.profile);
 
 db.profile.hasMany(db.post);
-db.profile.hasMany(db.comment);
 db.profile.hasMany(db.postReactions);
 db.profile.hasMany(db.share);
 
