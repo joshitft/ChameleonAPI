@@ -4,16 +4,13 @@ const db = require('../../db'),
 //req.isUserPresent.profileId 
 
 exports.addComment = (req,res)=>{
-    /*
-        expecting comment object in body as:
+    /* expecting comment object in body as:
         {
             postId: int,
-            content: text 
-        }
-    */
+            content: text
+        } */
    let commentObj = req.body;
-console.log(req.isUserPresent)
-   commentObj.profileId = 1;
+   commentObj.profileId = req.isUserPresent.profileId;
    
    db.comment.create(commentObj)
    .then(comment =>{

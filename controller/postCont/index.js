@@ -36,12 +36,12 @@ exports.getpost = (req,res)=>{
     let postID = req.params.id;
     let resultData = {}; 
     if(!parseInt(postID,10))
-        return util.errorHandler.call(this,422,{message : "Post with this ID doesn't exist"}, res)
+        throw new Error("Post ID is required as an input");
 
     db.post.findById(postID)
     .then(post =>{
         if(!post) 
-            throw new Error("no post found")
+            throw new Error(`No post found with ID ${postID}`)
 
         resultData.post = post;
         let promise = [];
@@ -54,7 +54,7 @@ exports.getpost = (req,res)=>{
     })
     .then(postrelatedData => {
         if(!postrelatedData)
-            throw new Error("no post data found");
+            throw new Error("Error in fetching post related data");
         resultData.user = postrelatedData[0];
         resultData.reactions = postrelatedData[1];
         resultData.shareCount = postrelatedData[2];
@@ -72,7 +72,6 @@ exports.getpost = (req,res)=>{
         return Promise.all(promise)
     })
     .then(reactionUsers => {
-        // console.log("\n__________",reactionUsers)
         if(reactionUsers)
         {
             for(let i=0;i<reactionUsers.length;i++){
@@ -104,8 +103,7 @@ exports.getpost = (req,res)=>{
     })
     .catch(err =>
         {
-            console.log(err.message);
-            util.errorHandler.call(this,400,{message : 'Error in finding post'}, res)
+            util.errorHandler.call(this,400,{message : err.message}, res)
         }
     );
 };
